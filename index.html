@@ -1,7 +1,3 @@
-<!--
-	Based on startbootstrap's '4 Col Portfolio
-	https://startbootstrap.com/template-overviews/4-col-portfolio/
--->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -25,7 +21,8 @@
 	
 	<!-- Bootstrap core JavaScript -->
     <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<script src="script/imgur.js"></script>
 
   </head>
 
@@ -35,54 +32,35 @@
 	<div id="header-row">
 		<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top ">
 			<div class="container">
-			  <a class="navbar-brand font-medium" href="/index.html">ImgurViewer</a>
-			  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			  </button>
-			  <div class="collapse navbar-collapse" id="navbarResponsive">
-				<ul class="navbar-nav ml-auto">
-				  <li class="nav-item">
-					  <a class="nav-link" href="/index.html">Home</a>
-				  </li>
-				  <li class="nav-item">
-					  <a class="nav-link" href="/projects/project-page.html">Projects</a>
-				  </li>
-				  <li class="nav-item">
-					  <a class="nav-link" href="/art/art-page.html">Art</a>
-				  </li>
-				  <li class="nav-item">
-					  <a class="nav-link" href="/contact/contact.html">Contact</a>
-				  </li>
-				</ul>
-			  </div>
-			</div>
+				<a class="navbar-brand font-medium" href="/index.html">ImgurViewer</a>
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="collapse navbar-collapse" id="navbarResponsive">
+					<ul class="navbar-nav ml-auto">
+					</ul>
+				</div>
+				</div>
 		  </nav>
 	</div>
 
     <!-- Page Content -->
     <div class="container top-margin">
+		<div class="row" id="form-row">
+			<input class="form-control" type="text" placeholder="Album Name" id="inputLoadAlbum">
+			<button class="btn btn-success" onclick="LoadAlbum()">Load Album</button>
+		</div>
+
 		<div class="row no-gutters" id="content-row">
 			<!-- col1 -->
-			<div class="col-lg-4 col-md-6 col-sm-12" id="content-col-0">
-				<img class="card-img-top" src="/media/1.jpg" alt="">
-				<img class="card-img-top" src="/media/5.jpg" alt="">
-			</div>
-			
+			<div class="col-lg-4 col-md-6 col-sm-12" id="content-col-0"></div>
 			<!-- col2 -->
-			<div class="col-lg-4 col-md-6 col-sm-12" id="content-col-2">
-				<img class="card-img-top" src="/media/2.jpg" alt="">
-				<img class="card-img-top" src="/media/3.jpg" alt="">
-			</div>
-
+			<div class="col-lg-4 col-md-6 col-sm-12" id="content-col-1"></div>
 			<!-- col3 -->
-			<div class="col-lg-4 col-md-6 col-sm-12" id="content-col-1">
-				<img class="card-img-top" src="/media/4.jpg" alt="">
-				<!--<video autoplay muted loop class="card-img-top" ><source src="/media/w9MMBtI.mp4" type="video/mp4"></video>-->
-			</div>
+			<div class="col-lg-4 col-md-6 col-sm-12" id="content-col-2"></div>
 		</div>
     </div>
-    <!-- /.container -->
-
+	<!-- /.container -->
   </body>
 
 </html>
