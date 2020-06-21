@@ -5,8 +5,10 @@ const endpointAccessToken="https://api.imgur.com/oauth2/token";
 const endpointAccountImages="https://api.imgur.com/3/account/me/images/{{page}}";
 const endpointAccountImageCount="https://api.imgur.com/3/account/me/images/count";
 
-function FetchAlbumImages(albumId)
+// returns an array of images from the specified album
+async function FetchAlbumImages(albumId)
 {
+    console.log("fetching album images");
     var myHeaders = new Headers();
     myHeaders.append("Authorization", "Client-ID " + clientId);
 
@@ -18,12 +20,12 @@ function FetchAlbumImages(albumId)
 
     var endpoint = endpointAlbum.replace("{{albumId}}", albumId);
 
-    fetch(endpoint, requestOptions)
-    .then(response => response.text())
-    .then(result => PopulateImages(JSON.parse(result).data))
-    .catch(error => console.log('error', error));
+    let response = await fetch(endpoint, requestOptions);
+    let data = await response.json();
+    return data;
 }
 
+// returns the number of images uploaded by the authenticated account
 async function FetchAccountImageCount()
 {
     var myHeaders = new Headers();
@@ -40,8 +42,10 @@ async function FetchAccountImageCount()
     return data;
 }
 
+// returns an array of images from a single page, uploaded by the authed account
 async function FetchAccountImages(page = 0)
 {
+    console.log("fetching account images");
     var myHeaders = new Headers();
     myHeaders.append("Authorization", "Bearer " + GetCurrentAccount().accessToken);
 
@@ -58,37 +62,69 @@ async function FetchAccountImages(page = 0)
     return data;
 }
 
-function ActionLoadAlbum()
+// entry point for loading an album
+async function ActionLoadAlbum()
 {
-    var input = document.getElementById("inputLoadAlbum").value;
-
     ClearContent();
 
+    // pull the album id from the input box
+    var input = document.getElementById("inputLoadAlbum").value;
     var startOfId = input.indexOf("a/");
     var albumId = input.substr(startOfId + 2);
-    FetchAlbumImages(albumId);
+
+    var albumImages;
+    // if we ran this request previously, use that output instead of requesting again
+    if("a/"+albumId == jsonPreviousResponse.input)
+        albumImages = jsonPreviousResponse.json;
+    // otherwise, go fetch the images
+    else
+        albumImages = await FetchAlbumImages(albumId);
+
+    // fill the grid with images
+    PopulateImages(albumImages.data);
+
+    // save the response
+    jsonPreviousResponse.input = "a/" + albumId;
+    jsonPreviousResponse.json = albumImages;
     //console.log(window.location.href + "a/" + albumId);
     //history.pushState({id:"album"}, document.title, window.location.href + "a/" + albumId);
 }
 
+// entry point for loading account images
 async function ActionLoadAccountImages()
 {
     ClearContent();
     
+    // figure out how many pages we have to go through
     var imageCount = (await FetchAccountImageCount()).data;
     var pages = Math.ceil(imageCount/50);
     var allImages = [];
 
-    for(var i = 0; i < pages; i++)
+    // if we ran this request previously, use that ouput instead of requesting again
+    if("u/"+GetCurrentAccount().username == jsonPreviousResponse.input)
+        allImages = jsonPreviousResponse.json;
+    // otherwise, loop all pages and add all responses to an array
+    else
     {
-        var page = (await FetchAccountImages(i));
-        var pageImages = (page).data;
-        allImages = allImages.concat(pageImages);
+        for(var i = 0; i < pages; i++)
+        {
+            var page = (await FetchAccountImages(i));
+            var pageImages = (page).data;
+            // append this pages images to the array
+            allImages = allImages.concat(pageImages);
+        }
+
+        // reverse as we account fetches from newest to oldest
+        allImages.reverse();
     }
 
-    //console.log(allImages);
-    allImages.reverse();
+    // fill grid with n number of images
+    // it struggles to handle a crap ton, especially on mobile
     PopulateImages(allImages, 50);
+
+    // save the response
+    jsonPreviousResponse.input = "u/" + GetCurrentAccount().username;
+    jsonPreviousResponse.json = allImages;
 }
 
 function ActionReaccess()
@@ -96,27 +132,16 @@ function ActionReaccess()
     
 }
 
+// entry point for authorizing an account
 function ActionAuthorize()
 {
     var endpoint = endpointAuthorize.replace("{{clientId}}", clientId);
     window.location = endpoint;
 }
 
+// entry point for removing the current account
 function ActionLogout()
 {
     localStorage.setItem("current_account", null);
     LoggedOut();
-}
-
-function LoggedIn()
-{
-    document.getElementById("form-account-loggedin").removeAttribute("hidden");
-    document.getElementById("form-account-loggedout").setAttribute("hidden", "");
-    document.getElementById("label-current-account").textContent = GetCurrentAccount().username;
-}
-
-function LoggedOut()
-{
-    document.getElementById("form-account-loggedout").removeAttribute("hidden");
-    document.getElementById("form-account-loggedin").setAttribute("hidden", "");
 }
