@@ -51,15 +51,8 @@ p+ul {
 	margin-bottom:30px;
 }
 
-/**
-	PORTFOLIO SPECIFIC
-**/
-.portfolio-category {
-	margin:0px 15px 0px 15px;
-	padding:10px;
-	
-	border-top-left-radius:5px;
-	border-top-right-radius:5px;
+.centre-horizontal {
+	margin: 0 auto;
 }
 
 /**
@@ -89,52 +82,46 @@ p+ul {
 }
 
 /**
-	CARDS
+	SPECIFIC ELEMENTS
 **/
-.card-header {
-	padding:10px;
+.forms-row {
+	background-color:#303030;
+	border-radius:15px;
+	padding:20px;
 }
 
-.card-body {
-	padding:10px;
+.form {
+	margin: 0 auto;
+	width:80%;
 }
 
-.card-title {
-	margin-bottom:0px;
-}
-
-/**
-	CAROUSEL
-**/
-.carousel-caption > .badge{
-    font-size:1em;
-	font-weight:100;
-}
-
-.carousel-inner > .carousel-item > img {
-	margin:auto;
-	height:200px;
-	
-	overflow:hidden;
-	border-radius:5px;
-}
-
-@media only screen and (min-width:768px) {
-	.carousel-inner > .carousel-item > img {
-		height:350px;
+/** Small devices (landscape phones, 576px and up) **/
+@media (min-width: 576px) {
+	#form-horizontal-rule {
+		display:block;
 	}
 }
 
-@media only screen and (min-width:1200px) {
-	.carousel-inner > .carousel-item > img {
-		height:450px;
+/** Medium devices (tablets, 768px and up) **/
+@media (min-width: 768px) {
+	#col-form-album {
+		border-left:1px solid #444444;
+	}
+
+	#col-form-account {
+		border-right:1px solid #444444;
+	}
+	#form-horizontal-rule {
+		display:none;
 	}
 }
 
-/**
-	ICONS
-**/
-.fa-logo {
-	margin-left:10px;
-	color:#fff;
+/** Large devices (desktops, 992px and up) **/
+@media (min-width: 992px) {
+
+}
+
+/** Extra large devices (large desktops, 1200px and up) **/
+@media (min-width: 1200px) {
+
 }

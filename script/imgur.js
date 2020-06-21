@@ -1,12 +1,14 @@
-const clientId = "058c8bb3e94cc6d";
-const albumRequestURL = "https://api.imgur.com/3/album/{{albumId}}/images";
+const clientId="058c8bb3e94cc6d";
+const endpointAlbum="https://api.imgur.com/3/album/{{albumId}}/images";
+const endpointAuthorize="https://api.imgur.com/oauth2/authorize?client_id={{clientId}}&response_type=token";
+const endpointAccessToken="https://api.imgur.com/oauth2/token";
+const endpointAccountImages="https://api.imgur.com/3/account/me/images/{{page}}";
+const endpointAccountImageCount="https://api.imgur.com/3/account/me/images/count";
 
 function FetchAlbumImages(albumId)
 {
     var myHeaders = new Headers();
     myHeaders.append("Authorization", "Client-ID " + clientId);
-    //myHeaders.append("Authorization", "Bearer " + accessToken);
-
 
     var requestOptions = {
     method: 'GET',
@@ -14,62 +16,49 @@ function FetchAlbumImages(albumId)
     redirect: 'follow'
     };
 
-    var endpoint = albumRequestURL.replace("{{albumId}}", albumId);
-    
+    var endpoint = endpointAlbum.replace("{{albumId}}", albumId);
+
     fetch(endpoint, requestOptions)
     .then(response => response.text())
-    .then(result => PopulateImages(result))
+    .then(result => PopulateImages(JSON.parse(result).data))
     .catch(error => console.log('error', error));
 }
 
-function PullImagePathsFromJSON(json)
+async function FetchAccountImageCount()
 {
-    var arrImagePaths = [];
-    var parsed = JSON.parse(json).data;
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", "Bearer " + GetCurrentAccount().accessToken);
 
-    for(var i = 0; i < parsed.length; i++)
-    {
-        var obj = parsed[i];
-        arrImagePaths.push([obj.link, obj.type]);
-    }
-    return arrImagePaths;
+    var requestOptions = {
+    method: 'GET',
+    headers: myHeaders,
+    redirect: 'follow'
+    };
+
+    let response = await fetch(endpointAccountImageCount, requestOptions);
+    let data = await response.json();
+    return data;
 }
 
-function PopulateImages(jsonResult)
+async function FetchAccountImages(page = 0)
 {
-    var arrImages = PullImagePathsFromJSON(jsonResult);
-    shuffle(arrImages);
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", "Bearer " + GetCurrentAccount().accessToken);
 
-    for(var i = 0; i < arrImages.length; i++)
-    {
-        var imgPath = arrImages[i][0];
-        var fileType = arrImages[i][1];
+    var requestOptions = {
+    method: 'GET',
+    headers: myHeaders,
+    redirect: 'follow'
+    };
 
-        if(fileType.includes("image"))
-        {
-            imageTags = "<img class='card-img-top' src='" + imgPath + "' id='newImage' loading='lazy'>";
-        }
-        else if(fileType.includes("video"))
-        {
-            imageTags = "<video autoplay muted loop class='card-img-top' loading='lazy'><source src='" + imgPath + "'></video>";
-        }
-        
-        var col = document.getElementById("content-col-" + i%3);
-        col.innerHTML += imageTags;
+    var endpoint = endpointAccountImages.replace("{{page}}", page);
 
-        /*var newImage = document.getElementById("newImage");
-        newImage.onload = function(){
-            columns[nextColumn] += this.height;
-            console.log(this.height);
-        }*/
-        //console.log("col:" + nextColumn + " height:" + columns[nextColumn]);
-        //newImage.removeAttribute('id');
-        //console.log("nextColumn:" + nextColumn);
-    }
-    console.log("loaded all images");
+    let response = await fetch(endpoint, requestOptions);
+    let data = await response.json();
+    return data;
 }
 
-function LoadAlbum()
+function ActionLoadAlbum()
 {
     var input = document.getElementById("inputLoadAlbum").value;
 
@@ -78,26 +67,56 @@ function LoadAlbum()
     var startOfId = input.indexOf("a/");
     var albumId = input.substr(startOfId + 2);
     FetchAlbumImages(albumId);
+    //console.log(window.location.href + "a/" + albumId);
+    //history.pushState({id:"album"}, document.title, window.location.href + "a/" + albumId);
 }
 
-function shuffle(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-      let j = Math.floor(Math.random() * (i + 1)); // random index from 0 to i
-  
-      // swap elements array[i] and array[j]
-      // we use "destructuring assignment" syntax to achieve that
-      // you'll find more details about that syntax in later chapters
-      // same can be written as:
-      // let t = array[i]; array[i] = array[j]; array[j] = t
-      [array[i], array[j]] = [array[j], array[i]];
-    }
-}
-
-function ClearContent()
+async function ActionLoadAccountImages()
 {
-    for(var i = 0; i < 3; i++)
+    ClearContent();
+    
+    var imageCount = (await FetchAccountImageCount()).data;
+    var pages = Math.ceil(imageCount/50);
+    var allImages = [];
+
+    for(var i = 0; i < pages; i++)
     {
-        var col = document.getElementById("content-col-" + i);
-        col.innerHTML = "";
+        var page = (await FetchAccountImages(i));
+        var pageImages = (page).data;
+        allImages = allImages.concat(pageImages);
     }
+
+    //console.log(allImages);
+    allImages.reverse();
+    PopulateImages(allImages, 50);
+}
+
+function ActionReaccess()
+{
+    
+}
+
+function ActionAuthorize()
+{
+    var endpoint = endpointAuthorize.replace("{{clientId}}", clientId);
+    window.location = endpoint;
+}
+
+function ActionLogout()
+{
+    localStorage.setItem("current_account", null);
+    LoggedOut();
+}
+
+function LoggedIn()
+{
+    document.getElementById("form-account-loggedin").removeAttribute("hidden");
+    document.getElementById("form-account-loggedout").setAttribute("hidden", "");
+    document.getElementById("label-current-account").textContent = GetCurrentAccount().username;
+}
+
+function LoggedOut()
+{
+    document.getElementById("form-account-loggedout").removeAttribute("hidden");
+    document.getElementById("form-account-loggedin").setAttribute("hidden", "");
 }

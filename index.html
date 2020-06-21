@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 
-  <head>
+<head>
 
-    <meta charset="utf-8">
+	<meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <title>Imgur Viewer</title>
 	<!-- Favicon -->
-	<link rel="shortcut icon" href="media/icon-60.png"/>
+	<link rel="shortcut icon" href="/media/icon-60.png"/>
 	
     <!-- Bootstrap core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -19,14 +19,19 @@
 	<!-- Google fonts -->
 	<link href="https://fonts.googleapis.com/css?family=Roboto:300,400i,400,100" rel="stylesheet">
 	
-	<!-- Bootstrap core JavaScript -->
+	<!-- Vendor scripts -->
     <script src="vendor/jquery/jquery.min.js"></script>
 	<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@16.1.0/dist/lazyload.min.js"></script>
+
+	<!-- Local scripts -->
+	<script src="script/utility.js"></script>
 	<script src="script/imgur.js"></script>
 
-  </head>
+</head>
 
-  <body>
+<body>
+	
 
     <!-- Navigation -->
 	<div id="header-row">
@@ -38,26 +43,75 @@
 				</button>
 				<div class="collapse navbar-collapse" id="navbarResponsive">
 					<ul class="navbar-nav ml-auto">
+						<li class="nav-item">
+							<a class="nav-link" href="/index.html">About</a>
+						</li>
 					</ul>
 				</div>
-				</div>
-		  </nav>
+			</div>
+		</nav>
 	</div>
 
     <!-- Page Content -->
     <div class="container top-margin">
-		<div class="row" id="form-row">
-			<input class="form-control" type="text" placeholder="Album Name" id="inputLoadAlbum">
-			<button class="btn btn-success" onclick="LoadAlbum()">Load Album</button>
+		<!-- Forms and Options -->
+		<div class="row no-gutters forms-row mb-3">
+			
+			<!-- Account Options -->
+			<div class="col-md-6 col-sm-12" id="col-form-account">
+				<div class="form mb-3" id="form-account">
+					<!-- Account Logged Out -->
+					<div style="text-align:center; margin:auto" id="form-account-loggedout">
+						<p class="text-muted">Not Signed In</p>
+						<button class="btn btn-primary" id="btnAuthorize" onclick="ActionAuthorize()">Authorize</button>
+						<span class="badge badge-primary" data-toggle="tooltip" data-placement="right" title="Click to Authorize">?</span>
+					</div>
+					<!-- Account Logged In -->
+					<div style="text-align:center; margin:auto" id="form-account-loggedin" hidden>
+						<p class="text-muted">Signed In As: <span id="label-current-account">Account</span></p>
+						<button class="btn btn-success" id="btnAuthorize" onclick="ActionLogout()">Log Out</button>
+						<button class="btn btn-success" onclick="ActionLoadAccountImages()">Load Account Images</button>
+					</div>
+				</div>
+			</div>
+
+			<hr class="border-secondary" id="form-horizontal-rule" style="width:100%">
+
+			<!-- Album Options-->
+			<div class="col-md-6 col-sm-12" id="col-form-album">
+				<div class="form" id="form-album">
+					<div class="input-group mb-3">
+						<input class="form-control" type="text" placeholder="Album Name" id="inputLoadAlbum">
+						<div class="input-group-append">
+							<button class="btn btn-success" onclick="ActionLoadAlbum()">Load Album</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<!-- Display Options -->
+		<div class="row no-gutters forms-row">
+			<select class="form-control" id="sortLoadAlbum">
+				<option value="oldest">Date Added (oldest)</option>
+				<option value="newest">Date Added (newest)</option>
+				<option value="random">Random</option>
+			</select>
 		</div>
 
-		<div class="row no-gutters" id="content-row">
+		<div class="row no-gutters top-margin" id="content-row">
 			<!-- col1 -->
-			<div class="col-lg-4 col-md-6 col-sm-12" id="content-col-0"></div>
+			<div class="col-lg-4 col-md-6 col-sm-12">
+				<div id="content-col-0"></div>
+			</div>
 			<!-- col2 -->
-			<div class="col-lg-4 col-md-6 col-sm-12" id="content-col-1"></div>
+			<div class="col-lg-4 col-md-6 col-sm-12">
+				<div id="content-col-1"></div>
+			</div>
 			<!-- col3 -->
-			<div class="col-lg-4 col-md-6 col-sm-12" id="content-col-2"></div>
+			<div class="col-lg-4 col-md-6 col-sm-12">
+				<div id="content-col-2"></div>
+			</div>
 		</div>
     </div>
 	<!-- /.container -->
