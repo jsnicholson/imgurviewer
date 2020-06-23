@@ -118,9 +118,8 @@ async function ActionLoadAccountImages()
         allImages.reverse();
     }
 
-    // fill grid with n number of images
-    // it struggles to handle a crap ton, especially on mobile
-    PopulateImages(allImages, 50);
+    // fill grid with images
+    PopulateImages(allImages);
 
     // save the response
     jsonPreviousResponse.input = "u/" + GetCurrentAccount().username;

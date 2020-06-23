@@ -23,7 +23,6 @@
 	<!-- Vendor scripts -->
     <script src="vendor/jquery/jquery.min.js"></script>
 	<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@16.1.0/dist/lazyload.min.js"></script>
 
 	<!-- Local scripts -->
 	<script src="script/utility.js"></script>
@@ -59,8 +58,8 @@
 		<div class="row no-gutters forms-row mb-3">
 			
 			<!-- Account Options -->
-			<div class="col-md-6 col-sm-12" id="col-form-account">
-				<div class="form mb-3" id="form-account">
+			<div class="form-col col-md-6 col-sm-12" id="col-form-account">
+				<div class="form" id="form-account">
 					<!-- Account Logged Out -->
 					<div style="text-align:center; margin:auto" id="form-account-loggedout">
 						<p class="text-muted">Not Signed In</p>
@@ -79,7 +78,7 @@
 			<hr class="border-secondary" id="form-horizontal-rule" style="width:100%">
 
 			<!-- Album Options-->
-			<div class="col-md-6 col-sm-12" id="col-form-album">
+			<div class="form-col col-md-6 col-sm-12" id="col-form-album">
 				<div class="form" id="form-album">
 					<div class="input-group mb-3">
 						<input class="form-control" type="text" placeholder="Album Name" id="inputLoadAlbum">
@@ -93,10 +92,18 @@
 		
 		<!-- Display Options -->
 		<div class="row no-gutters forms-row">
+			<!-- Sorting -->
 			<select class="form-control" id="sortLoadAlbum">
 				<option value="oldest">Date Added (oldest)</option>
 				<option value="newest">Date Added (newest)</option>
 				<option value="random">Random</option>
+			</select>
+
+			<!-- Number to display -->
+			<select class="form-control" id="selectDisplayCount">
+				<option value="20">20</option>
+				<option value="50" selected>50</option>
+				<option value="all">All</option>
 			</select>
 		</div>
 

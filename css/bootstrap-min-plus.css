@@ -82,15 +82,17 @@ p+ul {
 /**
 	SPECIFIC ELEMENTS
 **/
+.form {
+	position:relative;
+}
+
 .forms-row {
 	background-color:#303030;
 	border-radius:15px;
 	padding:20px;
 }
 
-.form {
-	margin: 0 auto;
-	width:80%;
+.form-col {
 }
 
 #btnBackToTop {
@@ -123,10 +125,12 @@ p+ul {
 @media (min-width: 768px) {
 	#col-form-album {
 		border-left:1px solid #444444;
+		padding-left:20px;
 	}
 
 	#col-form-account {
 		border-right:1px solid #444444;
+		padding-right:20px;
 	}
 	#form-horizontal-rule {
 		display:none;

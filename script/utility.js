@@ -107,8 +107,11 @@ function AddToShortestColumn(media)
 }
 
 // populate content columns with images
-function PopulateImages(arrImages, numberToLoad = -1)
+function PopulateImages(inputArrImages)
 {
+    // arrays are passed by value so make a copy
+    var arrImages = JSON.parse(JSON.stringify(inputArrImages));
+
     // fetch selected sort
     var elementSort = document.getElementById("sortLoadAlbum");
     var selectedSort = elementSort.options[elementSort.selectedIndex].value;
@@ -119,6 +122,19 @@ function PopulateImages(arrImages, numberToLoad = -1)
         arrImages.reverse();
     else if(selectedSort == "random")
         ShuffleArray(arrImages);
+
+    // fetch selected display amount
+    var elementAmount = document.getElementById("selectDisplayCount");
+    var selectedAmount = elementAmount.options[elementAmount.selectedIndex].value;
+    var numberToLoad;
+
+    // set value appropriately
+    if(selectedAmount == "20")
+        numberToLoad = 20;
+    else if(selectedAmount == "50")
+        numberToLoad = 50;
+    else if(selectedAmount == "all")
+        numberToLoad = -1;
 
     // take the first 'numberToLoad' images
     if(numberToLoad > -1)
