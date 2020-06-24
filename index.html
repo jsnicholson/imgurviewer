@@ -81,7 +81,7 @@
 		</div>
 		
 		<!-- Display Options -->
-		<div class="row no-gutters row-forms">
+		<div class="row no-gutters row-forms mb-3">
 			<!-- Sorting -->
 			<select class="form-control" id="sortLoadAlbum">
 				<option value="oldest">Date Added (oldest)</option>
@@ -97,11 +97,15 @@
 			</select>
 		</div>
 
-		<div class="row no-gutters" id="row-progress">
-
+		<div class="row no-gutters mb-3" id="row-progress" hidden>
+			<div class="col-sm-12">
+				<div class="progress">
+					<div class="progress-bar progress-bar-striped progress-bar-animated" id="loading-progress" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%"></div>
+				</div>
+			</div>
 		</div>
 
-		<div class="row no-gutters top-margin" id="row-content">
+		<div class="row no-gutters" id="row-content">
 			<!-- col1 -->
 			<div class="col-lg-4 col-md-6 col-sm-12">
 				<div id="content-col-0"></div>

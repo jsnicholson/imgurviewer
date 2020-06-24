@@ -170,6 +170,9 @@ function PopulateImages(inputArrImages)
         newMedia.src = arrImages[i].link;
         newMedia.classList.add("card-img-top");
     }
+
+    // hide progress bar
+    document.getElementById("row-progress").setAttribute("hidden", "");
 }
 
 // When the user clicks on the button, scroll to the top of the document

@@ -106,8 +106,18 @@ async function ActionLoadAccountImages()
     // otherwise, loop all pages and add all responses to an array
     else
     {
+        // make progress row visible
+        var rowProgress = document.getElementById("row-progress");
+        rowProgress.removeAttribute("hidden");
+
         for(var i = 0; i < pages; i++)
         {
+            var percent = (i/pages)*100;
+            // set progress width
+            var progessBar = document.getElementById("loading-progress");
+            progessBar.style = "width:" + percent + "%;";
+            progessBar.setAttribute("aria-valuenow", percent);
+
             var page = (await FetchAccountImages(i));
             var pageImages = (page).data;
             // append this pages images to the array
