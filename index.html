@@ -8,7 +8,7 @@
 
     <title>Imgur Viewer</title>
 	<!-- Favicon -->
-	<link rel="shortcut icon" href="/media/icon-60.png"/>
+	<link rel="shortcut icon" href="/media/favicon.ico"/>
 	
     <!-- Bootstrap core CSS -->
 	<link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -31,31 +31,21 @@
 </head>
 
 <body>
-	
-
     <!-- Navigation -->
 	<div id="header-row">
 		<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
 			<div class="container">
 				<a class="navbar-brand font-medium" href="/index.html">ImgurViewer</a>
-				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-					<span class="navbar-toggler-icon"></span>
-				</button>
-				<div class="collapse navbar-collapse" id="navbarResponsive">
-					<ul class="navbar-nav ml-auto">
-						<li class="nav-item">
-							<a class="nav-link" href="/index.html">About</a>
-						</li>
-					</ul>
-				</div>
+
+				<a class="link ml-auto" href="/index.html">About</a>
 			</div>
 		</nav>
 	</div>
 
     <!-- Page Content -->
-    <div class="container top-margin">
+    <div class="container mt-4 mb-4">
 		<!-- Forms and Options -->
-		<div class="row no-gutters forms-row mb-3">
+		<div class="row no-gutters row-forms mb-3">
 			
 			<!-- Account Options -->
 			<div class="form-col col-md-6 col-sm-12" id="col-form-account">
@@ -91,7 +81,7 @@
 		</div>
 		
 		<!-- Display Options -->
-		<div class="row no-gutters forms-row">
+		<div class="row no-gutters row-forms">
 			<!-- Sorting -->
 			<select class="form-control" id="sortLoadAlbum">
 				<option value="oldest">Date Added (oldest)</option>
@@ -107,7 +97,11 @@
 			</select>
 		</div>
 
-		<div class="row no-gutters top-margin" id="content-row">
+		<div class="row no-gutters" id="row-progress">
+
+		</div>
+
+		<div class="row no-gutters top-margin" id="row-content">
 			<!-- col1 -->
 			<div class="col-lg-4 col-md-6 col-sm-12">
 				<div id="content-col-0"></div>
@@ -122,12 +116,11 @@
 			</div>
 		</div>
     </div>
-	<!-- /.container -->
-	</body>
+</body>
 
-	<!-- Back to top -->
-	<button class="btn-primary" onclick="ScrollToTop()" id="btnBackToTop" title="Go to top">
-		<i class="fas fa-chevron-up"></i>
-	</button>
+<!-- Back to top -->
+<button class="btn-primary" onclick="ScrollToTop()" id="btnBackToTop" title="Go to top">
+	<i class="fas fa-chevron-up"></i>
+</button>
 
 </html>

@@ -82,17 +82,11 @@ p+ul {
 /**
 	SPECIFIC ELEMENTS
 **/
-.form {
-	position:relative;
-}
 
-.forms-row {
+.row-forms {
 	background-color:#303030;
 	border-radius:15px;
 	padding:20px;
-}
-
-.form-col {
 }
 
 #btnBackToTop {
@@ -114,11 +108,19 @@ p+ul {
 	background-color: #444; /* Add a dark-grey background on hover */
 }
 
-/** Small devices (landscape phones, 576px and up) **/
-@media (min-width: 576px) {
+/** Extra-Small devices (landscape phones, 576px and up) **/
+@media (min-width: 320px) {
 	#form-horizontal-rule {
 		display:block;
 	}
+
+	.form {
+		margin-bottom:20px;
+	}
+}
+
+/** Small devices (landscape phones, 576px and up) **/
+@media (min-width: 576px) {
 }
 
 /** Medium devices (tablets, 768px and up) **/
@@ -134,6 +136,10 @@ p+ul {
 	}
 	#form-horizontal-rule {
 		display:none;
+	}
+
+	.form {
+		margin-bottom:0px;
 	}
 }
 
