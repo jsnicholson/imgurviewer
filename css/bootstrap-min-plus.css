@@ -117,6 +117,10 @@ p+ul {
 	.form {
 		margin-bottom:20px;
 	}
+
+	#progress-type {
+		display:none;
+	}
 }
 
 /** Small devices (landscape phones, 576px and up) **/
@@ -140,6 +144,10 @@ p+ul {
 
 	.form {
 		margin-bottom:0px;
+	}
+
+	#progress-type {
+		display:inline-block;
 	}
 }
 

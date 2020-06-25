@@ -1,5 +1,6 @@
 const clientId="058c8bb3e94cc6d";
-const endpointAlbum="https://api.imgur.com/3/album/{{albumId}}/images";
+const endpointAlbum="https://api.imgur.com/3/album/{{albumHash}}/images";
+const endpointAlbumInfo="https://api.imgur.com/3/album/{{albumHash}}";
 const endpointAuthorize="https://api.imgur.com/oauth2/authorize?client_id={{clientId}}&response_type=token";
 const endpointAccessToken="https://api.imgur.com/oauth2/token";
 const endpointAccountImages="https://api.imgur.com/3/account/me/images/{{page}}";
@@ -8,7 +9,6 @@ const endpointAccountImageCount="https://api.imgur.com/3/account/me/images/count
 // returns an array of images from the specified album
 async function FetchAlbumImages(albumId)
 {
-    console.log("fetching album images");
     var myHeaders = new Headers();
     myHeaders.append("Authorization", "Client-ID " + clientId);
 
@@ -18,7 +18,25 @@ async function FetchAlbumImages(albumId)
     redirect: 'follow'
     };
 
-    var endpoint = endpointAlbum.replace("{{albumId}}", albumId);
+    var endpoint = endpointAlbum.replace("{{albumHash}}", albumId);
+
+    let response = await fetch(endpoint, requestOptions);
+    let data = await response.json();
+    return data;
+}
+
+async function FetchAlbumInfo(albumId)
+{
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", "Client-ID " + clientId);
+
+    var requestOptions = {
+    method: 'GET',
+    headers: myHeaders,
+    redirect: 'follow'
+    };
+
+    var endpoint = endpointAlbumInfo.replace("{{albumHash}}", albumId);
 
     let response = await fetch(endpoint, requestOptions);
     let data = await response.json();
@@ -80,6 +98,10 @@ async function ActionLoadAlbum()
     else
         albumImages = await FetchAlbumImages(albumId);
 
+    // fetch information about the album
+    var albumInfo = await FetchAlbumInfo(albumId);
+    console.log(albumInfo.data.title);
+
     // fill the grid with images
     PopulateImages(albumImages.data);
 
@@ -112,11 +134,7 @@ async function ActionLoadAccountImages()
 
         for(var i = 0; i < pages; i++)
         {
-            var percent = (i/pages)*100;
-            // set progress width
-            var progessBar = document.getElementById("loading-progress");
-            progessBar.style = "width:" + percent + "%;";
-            progessBar.setAttribute("aria-valuenow", percent);
+            SetProgress("Pages: ", i, pages);
 
             var page = (await FetchAccountImages(i));
             var pageImages = (page).data;

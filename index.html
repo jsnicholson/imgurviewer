@@ -82,29 +82,59 @@
 		
 		<!-- Display Options -->
 		<div class="row no-gutters row-forms mb-3">
-			<!-- Sorting -->
-			<select class="form-control" id="sortLoadAlbum">
-				<option value="oldest">Date Added (oldest)</option>
-				<option value="newest">Date Added (newest)</option>
-				<option value="random">Random</option>
-			</select>
+			<div style="width:100%;">
+				<button class="btn btn-primary" style="float:left;" type="button" data-toggle="collapse" data-target="#collapse-form-display" aria-expanded="true" aria-controls="collapse-form-display">
+					<i class="fas fa-chevron-up"></i>
+				</button>
+				<span class="font-small ml-2" style="float:left;">Display Options</span>
+			</div>
 
-			<!-- Number to display -->
-			<select class="form-control" id="selectDisplayCount">
-				<option value="20">20</option>
-				<option value="50" selected>50</option>
-				<option value="all">All</option>
-			</select>
+			<div class="collapse show mt-1" id="collapse-form-display" style="width:100%">
+				<!-- Sorting -->
+				<select class="form-control" id="sortLoadAlbum">
+					<option value="oldest">Date Added (oldest)</option>
+					<option value="newest">Date Added (newest)</option>
+					<option value="random">Random</option>
+				</select>
+
+				<!-- Number to display -->
+				<select class="form-control" id="selectDisplayCount">
+					<option value="20">20</option>
+					<option value="50" selected>50</option>
+					<option value="all">All</option>
+				</select>
+			</div>
 		</div>
 
+		<!-- Saved albums -->
+		<div class="row no-gutters row-forms mb-3">
+			<div style="width:100%;">
+				<button class="btn btn-primary" style="float:left;" type="button" data-toggle="collapse" data-target="#collapse-form-saved" aria-expanded="false" aria-controls="collapse-form-saved">
+					<i class="fas fa-chevron-up"></i>
+				</button>
+				<span class="font-small ml-2" style="float:left; text-align:center;">Saved Albums</span>
+			</div>
+
+			<div class="collapse mt-1" id="collapse-form-saved" style="width:100%">
+				<p>Current album</p>
+			</div>
+		</div>
+
+		<!-- Progress bar-->
 		<div class="row no-gutters mb-3" id="row-progress" hidden>
-			<div class="col-sm-12">
-				<div class="progress">
+			<div class="col-sm-12" style="display:inline-block;">
+				<!-- Progress label -->
+				<span class="badge badge-success" style="width:8%; float:left; font-weight:400;">
+					<span id="progress-type">Pages </span>
+					<span id="progress-current">0</span>/<span id="progress-total">0</span>
+				</span>
+				<div class="progress" style="width:90%; height:100%; float:right;">
 					<div class="progress-bar progress-bar-striped progress-bar-animated" id="loading-progress" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%"></div>
 				</div>
 			</div>
 		</div>
 
+		<!-- Content -->
 		<div class="row no-gutters" id="row-content">
 			<!-- col1 -->
 			<div class="col-lg-4 col-md-6 col-sm-12">

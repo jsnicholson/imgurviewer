@@ -104,6 +104,15 @@ function AddToShortestColumn(media)
     
     // place media in shortest
     contentColumns[0].appendChild(media);
+
+    // set progress label
+    var currentNumImagesLoaded = parseInt(document.getElementById("progress-current").textContent);
+    var totalNumImagesToLoad = parseInt(document.getElementById("progress-total").textContent);
+    SetProgress(null, currentNumImagesLoaded+1, totalNumImagesToLoad);
+
+    // hide progress bar
+    if(currentNumImagesLoaded+1 == totalNumImagesToLoad)
+        document.getElementById("row-progress").setAttribute("hidden", "");
 }
 
 // populate content columns with images
@@ -140,6 +149,10 @@ function PopulateImages(inputArrImages)
     if(numberToLoad > -1)
         arrImages = arrImages.slice(0, numberToLoad);
 
+    // unhide progress and set label
+    document.getElementById("row-progress").removeAttribute("hidden");
+    SetProgress("Images: ", 0, arrImages.length);
+
     for(var i = 0; i < arrImages.length; i++)
     {
         var newMedia;
@@ -170,9 +183,6 @@ function PopulateImages(inputArrImages)
         newMedia.src = arrImages[i].link;
         newMedia.classList.add("card-img-top");
     }
-
-    // hide progress bar
-    document.getElementById("row-progress").setAttribute("hidden", "");
 }
 
 // When the user clicks on the button, scroll to the top of the document
@@ -194,4 +204,23 @@ function LoggedOut()
 {
     document.getElementById("form-account-loggedout").removeAttribute("hidden");
     document.getElementById("form-account-loggedin").setAttribute("hidden", "");
+}
+
+// set label above progress bar
+function SetProgress(type, current, total)
+{
+    if(type != null)
+        document.getElementById("progress-type").textContent = type;
+    
+    if(current != null)
+        document.getElementById("progress-current").textContent = current;
+    
+    if(total != null)
+        document.getElementById("progress-total").textContent = total;
+
+    // set bar
+    var percent = (current/total)*100;
+    var progessBar = document.getElementById("loading-progress");
+    progessBar.style = "width:" + percent + "%;";
+    progessBar.setAttribute("aria-valuenow", percent);
 }
