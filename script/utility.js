@@ -165,6 +165,10 @@ function PopulateImages(inputArrImages)
             newMedia.onload = function() {
                 AddToShortestColumn(this);
             };
+
+            newMedia.onclick = function() {
+                ShowModalImage(this.src);
+            }
         }
         // if media is video, create new video element, set appropriate onload, add specific attributes
         else if(fileType.includes("video"))
@@ -173,6 +177,10 @@ function PopulateImages(inputArrImages)
             newMedia.onloadeddata = function() {
                 AddToShortestColumn(this);
             };
+
+            newMedia.onclick = function() {
+                ShowModalVideo(this.src);
+            }
 
             newMedia.setAttribute("autoplay", "");
             newMedia.setAttribute("loop", "");
@@ -224,3 +232,56 @@ function SetProgress(type, current, total)
     progessBar.style = "width:" + percent + "%;";
     progessBar.setAttribute("aria-valuenow", percent);
 }
+
+function HideModal()
+{
+    document.getElementById("fixed-image").setAttribute("src", "");
+    document.getElementById("fixed-video").setAttribute("src", "");
+
+    document.getElementById("fullscreen-frame").setAttribute("hidden", "");
+
+    enableScroll();
+}
+
+function ShowModalImage(src)
+{
+    disableScroll();
+
+    document.getElementById("fixed-image").removeAttribute("hidden");
+    document.getElementById("fixed-video").setAttribute("hidden", "");
+
+    document.getElementById("fixed-image").setAttribute("src", src);
+    document.getElementById("fixed-video").setAttribute("src", "");
+
+    document.getElementById("fullscreen-frame").removeAttribute("hidden");
+}
+
+function ShowModalVideo(src)
+{
+    disableScroll();
+
+    document.getElementById("fixed-image").setAttribute("hidden", "");
+    document.getElementById("fixed-video").removeAttribute("hidden");
+
+    document.getElementById("fixed-image").setAttribute("src", "");
+    document.getElementById("fixed-video").setAttribute("src", src);
+
+    document.getElementById("fullscreen-frame").removeAttribute("hidden");
+}
+
+// call this to Disable
+function disableScroll() { 
+    // Get the current page scroll position 
+    scrollTop = window.pageYOffset || document.documentElement.scrollTop; 
+    scrollLeft = window.pageXOffset || document.documentElement.scrollLeft, 
+  
+        // if any scroll is attempted, set this to the previous value 
+        window.onscroll = function() { 
+            window.scrollTo(scrollLeft, scrollTop); 
+        }; 
+} 
+  
+  // call this to Enable
+  function enableScroll() { 
+    window.onscroll = function() {}; 
+} 
