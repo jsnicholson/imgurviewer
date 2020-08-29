@@ -126,9 +126,9 @@ function PopulateImages(inputArrImages)
     var selectedSort = elementSort.options[elementSort.selectedIndex].value;
 
     // sort images appropriately
-    if(selectedSort == "oldest"){}
-    else if(selectedSort == "newest")
+    if(selectedSort == "newest")
         arrImages.reverse();
+    else if(selectedSort == "oldest"){}
     else if(selectedSort == "random")
         ShuffleArray(arrImages);
 
