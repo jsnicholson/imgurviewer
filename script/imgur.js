@@ -5,7 +5,6 @@ const endpointAuthorize="https://api.imgur.com/oauth2/authorize?client_id={{clie
 const endpointAccessToken="https://api.imgur.com/oauth2/token";
 const endpointAccountImages="https://api.imgur.com/3/account/me/images/{{page}}";
 const endpointAccountImageCount="https://api.imgur.com/3/account/me/images/count";
-const endpointUploadImage="https://api.imgur.com/3/upload";
 
 // returns an array of images from the specified album
 async function FetchAlbumImages(albumId)
@@ -75,29 +74,6 @@ async function FetchAccountImages(page = 0)
     };
 
     var endpoint = endpointAccountImages.replace("{{page}}", page);
-
-    let response = await fetch(endpoint, requestOptions);
-    let data = await response.json();
-    return data;
-}
-
-// upload image via a direct link
-async function UploadImageURL(imageURL)
-{
-    var myHeaders = new Headers();
-    myHeaders.append("Authorization", "Client-ID {{clientId}}");
-
-    var formdata = new FormData();
-    formdata.append("image", imageURL);
-
-    var requestOptions = {
-    method: 'POST',
-    headers: myHeaders,
-    body: formdata,
-    redirect: 'follow'
-    };
-
-    var endpoint = endpointUploadImage;
 
     let response = await fetch(endpoint, requestOptions);
     let data = await response.json();
@@ -176,26 +152,6 @@ async function ActionLoadAccountImages()
     // save the response
     jsonPreviousResponse.input = "u/" + GetCurrentAccount().username;
     jsonPreviousResponse.json = allImages;
-}
-
-async function ActionUploadURL()
-{
-    var imageURLToUpload = document.getElementById("inputUploadURL").value;
-
-    var response = (await UploadImageURL(imageURLToUpload));
-    
-    var responseElementId = "";
-    if(response.success)
-        responseElementId = "alert-success";
-    else
-        responseElementId = "alert-error";
-
-    var responseElement = document.getElementById(responseElementId);
-    responseElement.removeAttribute("hidden")
-
-    setTimeout(function () {
-        responseElement.setAttribute("hidden", "");
-    }, 5000);
 }
 
 function ActionReaccess()
