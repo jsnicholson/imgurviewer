@@ -281,7 +281,31 @@ function disableScroll() {
         }; 
 } 
   
-  // call this to Enable
-  function enableScroll() { 
+// call this to Enable
+function enableScroll() { 
     window.onscroll = function() {}; 
-} 
+}
+
+function AlertSuccess(msg="Your action was successful") {
+    var alert = document.getElementById("alert-success");
+    var $alert = $('.alert');
+
+    document.getElementById("alert-msg-success").innerHTML = msg;
+
+    alert.removeAttribute("hidden");
+    setTimeout(function(){
+        alert.setAttribute("hidden", "");
+    }, 5000);
+}
+
+function AlertError(msg="There was an error") {
+    var alert = document.getElementById("alert-error");
+    var $alert = $('.alert');
+
+    document.getElementById("alert-msg-error").innerHTML = msg;
+
+    alert.removeAttribute("hidden");
+    setTimeout(function(){
+        alert.setAttribute("hidden", "");
+    }, 5000);
+}

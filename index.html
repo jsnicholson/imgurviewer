@@ -86,11 +86,17 @@
 			</div>
 		</div>
 
-		<!-- Error Alert 
-		<div class="alert alert-dismissible alert-danger" id="alert-error">
+		<!-- Error Alert -->
+		<div class="alert alert-dismissible alert-danger" id="alert-error" hidden>
 			<button type="button" class="close" data-dismiss="alert">&times;</button>
-			<span>There was an error</span>
-		</div>-->
+			<span id="alert-msg-error">There was an error</span>
+		</div>
+
+		<!-- Success Alert -->
+		<div class="alert alert-dismissible alert-success" id="alert-success" hidden>
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+			<span id="alert-msg-success">Successfull!</span>
+		</div>
 		
 		<!-- Display Options -->
 		<div class="row no-gutters row-forms mb-3">
@@ -145,6 +151,27 @@
 			<!-- col3 -->
 			<div class="col-lg-4 col-md-6 col-sm-12">
 				<div id="content-col-2"></div>
+			</div>
+		</div>
+
+		<!-- Upload Image -->
+		<div class="row no-gutters row-forms mb-3">
+			<div style="width:100%;">
+				<button class="btn btn-primary" style="float:left;" type="button" data-toggle="collapse" data-target="#collapse-form-upload" aria-expanded="true" aria-controls="collapse-form-upload">
+					<i class="fas fa-chevron-up"></i>
+				</button>
+				<span class="font-small ml-2" style="float:left;">Image Upload</span>
+			</div>
+
+			<div class="collapse mt-2" id="collapse-form-upload" style="width:100%">
+				<div class="form" id="form-album">
+					<div class="input-group mb-3">
+						<input class="form-control" type="text" placeholder="Image URL" id="inputUploadImage">
+						<div class="input-group-append">
+							<button class="btn btn-success" onclick="ActionUploadImageURL()">Upload</button>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
     </div>
