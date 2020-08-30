@@ -208,6 +208,9 @@ function LoggedIn()
     document.getElementById("form-account-loggedin").removeAttribute("hidden");
     document.getElementById("form-account-loggedout").setAttribute("hidden", "");
     document.getElementById("label-current-account").textContent = GetCurrentAccount().username;
+
+    // also show upload options once logged in
+    document.getElementById("row-upload").removeAttribute("hidden");
 }
 
 // set the account panel to show logged out
@@ -215,6 +218,9 @@ function LoggedOut()
 {
     document.getElementById("form-account-loggedout").removeAttribute("hidden");
     document.getElementById("form-account-loggedin").setAttribute("hidden", "");
+
+    // also hide upload options once logged out
+    document.getElementById("row-upload").setAttribute("hidden", "");
 }
 
 // set label above progress bar

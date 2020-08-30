@@ -192,7 +192,7 @@ async function ActionUploadImageURL()
         document.getElementById("inputUploadImage").value = "";
     }
     else
-        AlertError("Error " + response.status + " : " + response.data.error);
+        AlertError("Error " + response.status + " : " + response.data.error.message);
 }
 
 function ActionReaccess()
