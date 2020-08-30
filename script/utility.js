@@ -295,6 +295,7 @@ function enableScroll() {
     window.onscroll = function() {}; 
 }
 
+// display a success alert for 5 seconds
 function AlertSuccess(msg="Your action was successful") {
     var alert = document.getElementById("alert-success");
     var $alert = $('.alert');
@@ -307,6 +308,7 @@ function AlertSuccess(msg="Your action was successful") {
     }, 5000);
 }
 
+// display an error alert for 5 seconds
 function AlertError(msg="There was an error") {
     var alert = document.getElementById("alert-error");
     var $alert = $('.alert');
@@ -319,19 +321,24 @@ function AlertError(msg="There was an error") {
     }, 5000);
 }
 
+// there are some websites that we can get direct image links for even if they arent provided
+// fetch them here
 function GetDirectImageURL(_imageURL)
 {
     var imageURL = _imageURL;
+    // supported imgur formats
     var formats = [".jpeg", ".png", ".gif", ".apng", ".tiff", ".mp4", ".mpeg", ".avi", ".webm", ".quicktime", ".x-matroska", ".x-flv", ".x-msvideo", ".x-ms-wmv"];
     var formatExtension = imageURL.substr(imageURL.lastIndexOf("."));
     var usableFormat = formats.includes(formatExtension);
     
     if(!usableFormat)
     {
+        // can expand if adding more supported sites
         var urlMap = "https://thumbs.redgifs.com/{{imageId}}-size_restricted.gif";
 
         if(imageURL.includes("redgifs") || imageURL.includes("gifdeliverynetwork"))
         {
+            // fetch the image Id and capitalise in line with gfycats format
             var imageId = imageURL.substr(imageURL.lastIndexOf("/") + 1);
             imageId = CapitaliseWordsInString(imageId);
             imageURL = urlMap.replace("{{imageId}}", imageId)
@@ -343,8 +350,6 @@ function GetDirectImageURL(_imageURL)
             return false;
         }
     }
-
-    console.log(imageURL);
     
     return imageURL;
 }

@@ -81,10 +81,10 @@ async function FetchAccountImages(page = 0)
     return data;
 }
 
+// uploads an image to the authed account via a direct file link
 async function UploadImageURL(imageURL)
 {
     var myHeaders = new Headers();
-    //myHeaders.append("Authorization", "Client-ID " + clientId);
     myHeaders.append("Authorization", "Bearer " + GetCurrentAccount().accessToken);
 
     var formdata = new FormData();
@@ -179,15 +179,17 @@ async function ActionLoadAccountImages()
     jsonPreviousResponse.json = allImages;
 }
 
+// entry point for uploading an image to the authed account with a direct file link
 async function ActionUploadImageURL()
 {
     var input = document.getElementById("inputUploadImage").value;
     var imageDirectURL = GetDirectImageURL(input);
+    // if direct link failed that means we cant fetch it, let it handle the error
     if(!imageDirectURL){return false;}
+
     var response = await UploadImageURL(imageDirectURL);
 
     var responseSuccess = response.success;
-    console.log(response);
     if(responseSuccess == true)
     {
         AlertSuccess("Image uploaded successfully!");

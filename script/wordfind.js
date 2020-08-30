@@ -13,23 +13,25 @@ function CapitaliseWordsInString(string)
     var inputString = string;
     var finalString = "";
 
+    // loop over each word listed (optimise with only looking at letters that begin with the same)
     for(var i = 0; i < adjectives.length; i++)
     {
         var word = adjectives[i];
 
+        // if first letters match and the input includes the word
         if(word.charAt(0) == inputString.charAt(0) && inputString.includes(word))
         {
+            // remove the word from input
             inputString = inputString.replace(word, "");
-
+            // add capitalised word to final url string
             var wordToAdd = word.charAt(0).toUpperCase() + word.slice(1);
 
             finalString += wordToAdd;
         }
     }
 
+    // the remaining string can just be capitalised rather than searching again
     finalString += (inputString.charAt(0).toUpperCase() + inputString.slice(1));
-
-    console.log(finalString);
 
     return finalString;
 }
