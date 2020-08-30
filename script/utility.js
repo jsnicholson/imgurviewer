@@ -74,6 +74,8 @@ function ClearContent()
         var col = document.getElementById("content-col-" + i);
         col.innerHTML = "";
     }
+
+    document.getElementById("row-content").setAttribute("hidden", "");
 }
 
 // fetch the currently 'logged in' account
@@ -153,6 +155,7 @@ function PopulateImages(inputArrImages)
     document.getElementById("row-progress").removeAttribute("hidden");
     SetProgress("Images: ", 0, arrImages.length);
 
+    document.getElementById("row-content").removeAttribute("hidden");
     for(var i = 0; i < arrImages.length; i++)
     {
         var newMedia;
@@ -308,4 +311,28 @@ function AlertError(msg="There was an error") {
     setTimeout(function(){
         alert.setAttribute("hidden", "");
     }, 5000);
+}
+
+function GetDirectImageURL(_imageURL)
+{
+    var imageURL = _imageURL;
+    var formats = [".jpeg", ".png", ".gif", ".apng", ".tiff", ".mp4", ".mpeg", ".avi", ".webm", ".quicktime", ".x-matroska", ".x-flv", ".x-msvideo", ".x-ms-wmv"];
+    var formatExtension = imageURL.substr(imageURL.lastIndexOf("."));
+    var usableFormat = formats.includes(formatExtension);
+    
+    if(!usableFormat)
+    {
+        var urlMap = "https://thumbs.redgifs.com/{{imageId}}-size_restricted.gif";
+
+        if(imageURL.indexOf("redgifs") || imageURL.indexOf("gifdeliverynetwork"))
+        {
+            var imageId = imageURL.substr(imageURL.lastIndexOf("/") + 1);
+            imageId = CapitaliseWordsInString(imageId);
+            imageURL = urlMap.replace("{{imageId}}", imageId)
+        }
+    }
+
+    console.log(imageURL);
+    
+    return imageURL;
 }
