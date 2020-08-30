@@ -330,11 +330,17 @@ function GetDirectImageURL(_imageURL)
     {
         var urlMap = "https://thumbs.redgifs.com/{{imageId}}-size_restricted.gif";
 
-        if(imageURL.indexOf("redgifs") || imageURL.indexOf("gifdeliverynetwork"))
+        if(imageURL.includes("redgifs") || imageURL.includes("gifdeliverynetwork"))
         {
             var imageId = imageURL.substr(imageURL.lastIndexOf("/") + 1);
             imageId = CapitaliseWordsInString(imageId);
             imageURL = urlMap.replace("{{imageId}}", imageId)
+        }
+        else
+        {
+            // not a direct link and we dont have any special measures in place to extract it
+            AlertError("Error: not a direct file link and no special measure to fetch it")
+            return false;
         }
     }
 

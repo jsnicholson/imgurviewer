@@ -181,8 +181,10 @@ async function ActionLoadAccountImages()
 
 async function ActionUploadImageURL()
 {
-    var imageToUploadURL = document.getElementById("inputUploadImage").value;
-    var response = await UploadImageURL(GetDirectImageURL(imageToUploadURL));
+    var input = document.getElementById("inputUploadImage").value;
+    var imageDirectURL = GetDirectImageURL(input);
+    if(!imageDirectURL){return false;}
+    var response = await UploadImageURL(imageDirectURL);
 
     var responseSuccess = response.success;
     console.log(response);
