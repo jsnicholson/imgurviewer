@@ -1,6 +1,7 @@
 // global vars
 var jsonPreviousResponse={input:"", json:""};
 var btnBackToTop;
+var mediaPopulating = { displayOrder:"", mediaToLoad:0, mediaLoaded:0, mediaArray:[] };
 
 window.onload = function() {
     // fetch the back to top button for later use
@@ -106,7 +107,11 @@ function AddToShortestColumn(media)
     
     // place media in shortest
     contentColumns[0].appendChild(media);
+    console.log("added to shortest column");
+}
 
+function CalculateProgress()
+{
     // set progress label
     var currentNumImagesLoaded = parseInt(document.getElementById("progress-current").textContent);
     var totalNumImagesToLoad = parseInt(document.getElementById("progress-total").textContent);
@@ -126,6 +131,7 @@ function PopulateImages(inputArrImages)
     // fetch selected sort
     var elementSort = document.getElementById("sortLoadAlbum");
     var selectedSort = elementSort.options[elementSort.selectedIndex].value;
+    displayOrder = selectedSort;
 
     // sort images appropriately
     if(selectedSort == "newest")
@@ -156,6 +162,12 @@ function PopulateImages(inputArrImages)
     SetProgress("Images: ", 0, arrImages.length);
 
     document.getElementById("row-content").removeAttribute("hidden");
+
+    // store information about what we're loading so the media can handle it when it loads
+    mediaPopulating.displayOrder = selectedSort;
+    mediaPopulating.mediaToLoad = arrImages.length;
+    mediaPopulating.mediaLoaded = 0;
+
     for(var i = 0; i < arrImages.length; i++)
     {
         var newMedia;
@@ -166,7 +178,7 @@ function PopulateImages(inputArrImages)
         {
             newMedia = new Image();
             newMedia.onload = function() {
-                AddToShortestColumn(this);
+                SingleMediaLoaded(this);
             };
 
             newMedia.onclick = function() {
@@ -178,7 +190,7 @@ function PopulateImages(inputArrImages)
         {
             newMedia = document.createElement("video");
             newMedia.onloadeddata = function() {
-                AddToShortestColumn(this);
+                SingleMediaLoaded(this);
             };
 
             newMedia.onclick = function() {
@@ -192,7 +204,63 @@ function PopulateImages(inputArrImages)
 
         // regardless what type, set the src and add class
         newMedia.src = arrImages[i].link;
+        newMedia.id = i;
         newMedia.classList.add("card-img-top");
+    }
+}
+
+// called when a single piece of media has loaded
+function SingleMediaLoaded(media)
+{
+    mediaPopulating.mediaLoaded++;
+    mediaPopulating.mediaArray.push(media);
+
+    // if order is random then just add to shortest column
+    if(mediaPopulating.displayOrder == "random")
+    {
+        AddToShortestColumn(media);
+    }
+    // otherwise we want to try and preserve the order, despite them loading at different times
+    else if(mediaPopulating.displayOrder == "newest" || mediaPopulating.displayOrder == "oldest")
+    {
+        // all media loaded
+        if(mediaPopulating.mediaLoaded >= mediaPopulating.mediaToLoad)
+            AllMediaLoaded();
+    }
+
+    CalculateProgress();
+}
+
+function AllMediaLoaded()
+{
+    // get all 3 columns
+    var contentColumns = [];
+    var content = [];
+    for(var i = 0; i < 3; i++)
+        contentColumns.push(document.getElementById("content-col-" + i));
+    
+    var mediaArray = mediaPopulating.mediaArray;
+    // id was stored as position in original list so sort by that
+    mediaArray.sort(function(a, b) {
+        return a.id - b.id;
+    });
+
+    var columnAmount = Math.floor(mediaArray.length/3);
+    // pull a third for the first 2 columns and the remainder for the last
+    var mediaCol1 = mediaArray.slice(0, columnAmount);
+    var mediaCol2 = mediaArray.slice(columnAmount, 2*columnAmount);
+    var mediaCol3 = mediaArray.slice(2*columnAmount, mediaArray.length);
+    content[0] = mediaCol1;
+    content[1] = mediaCol2;
+    content[2] = mediaCol3;
+
+    // add each content array to the correct content column
+    for(var i = 0; i < contentColumns.length; i++)
+    {
+        for(var j = 0; j < content[i].length; j++)
+        {
+            contentColumns[i].appendChild(content[i][j]);
+        }
     }
 }
 
