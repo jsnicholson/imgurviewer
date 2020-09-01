@@ -191,12 +191,11 @@ async function ActionUploadImageURL()
 
     var responseSuccess = response.success;
     if(responseSuccess == true)
-    {
         AlertSuccess("Image uploaded successfully!");
-        document.getElementById("inputUploadImage").value = "";
-    }
     else
         AlertError("Error " + response.status + " : " + response.data.error.message);
+
+    document.getElementById("inputUploadImage").value = "";
 }
 
 function ActionReaccess()
