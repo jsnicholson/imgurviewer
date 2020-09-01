@@ -2,6 +2,7 @@
 var jsonPreviousResponse={input:"", json:""};
 var btnBackToTop;
 var mediaPopulating = { displayOrder:"", mediaToLoad:0, mediaLoaded:0, mediaArray:[] };
+var screenDimensions = { width:0, height:0 };
 
 window.onload = function() {
     // fetch the back to top button for later use
@@ -43,6 +44,9 @@ window.onload = function() {
         
         LoggedIn();
     }
+
+    screenDimensions.width = screen.width;
+    screenDimensions.height = screen.height;
 }
 
 // When the user scrolls down 20px from the top of the document, show the button
@@ -51,6 +55,26 @@ window.onscroll = function(){
         btnBackToTop.style.display = "block";
     } else {
         btnBackToTop.style.display = "none";
+    }
+};
+
+screen.orientation.onchange = function (){
+    // swap screen dimensions
+    var temp;
+    temp = screenDimensions.width;
+    screenDimensions.width = screenDimensions.height;
+    screenDimensions.height = temp;
+
+    // if modal is showing, adjust the dimensions if we have changed screen orientation
+    if(!(document.getElementById("fullscreen-frame").hasAttribute("hidden")))
+    {
+        var modalImageElement = document.getElementById("fixed-image");
+        var modalVideoElement = document.getElementById("fixed-video");
+        var width, height, media;
+        if(modalImageElement.src != "") { width = modalImageElement.naturalWidth; height = modalImageElement.naturalHeight; media = modalImageElement; }
+        else if(modalVideoElement.src != "") { width = modalVideoElement.videoWidth; height = modalVideoElement.videoHeight; media = modalVideoElement; }
+
+        SetModalMediaStyle(media, width, height);
     }
 };
 
@@ -107,7 +131,6 @@ function AddToShortestColumn(media)
     
     // place media in shortest
     contentColumns[0].appendChild(media);
-    console.log("added to shortest column");
 }
 
 function CalculateProgress()
@@ -331,9 +354,12 @@ function ShowModalImage(src)
     document.getElementById("fixed-video").setAttribute("src", "");
 
     document.getElementById("fullscreen-frame").removeAttribute("hidden");
+
+    var imageElement = document.getElementById("fixed-image");
+    SetModalMediaStyle(imageElement, imageElement.naturalWidth, imageElement.naturalHeight);
 }
 
-function ShowModalVideo(src)
+function ShowModalVideo(src, time)
 {
     disableScroll();
 
@@ -344,6 +370,33 @@ function ShowModalVideo(src)
     document.getElementById("fixed-video").setAttribute("src", src);
 
     document.getElementById("fullscreen-frame").removeAttribute("hidden");
+
+    var videoElement = document.getElementById("fixed-video");
+    SetModalMediaStyle(videoElement, videoElement.videoWidth, videoElement.videoHeight);
+
+}
+
+// we cant have width and height changing to max purely controlled by css
+// here we figure out if its portrait or landscape and adjust accordingly
+// wouldnt have to do this if some images werent significantly smaller than the screen size
+function SetModalMediaStyle(media, srcWidth, srcHeight)
+{
+    var screenWidth = screenDimensions.width;
+    var screenHeight = screenDimensions.height;
+
+    var screenRatio = screenWidth/screenHeight;
+    var srcRatio = srcWidth/srcHeight;
+
+    if(screenRatio < srcRatio)
+    {
+        media.style.width = "95%";
+        media.style.height = "auto";
+    }
+    else
+    {   
+        media.style.width = "auto";
+        media.style.height = "95%";
+    }
 }
 
 // call this to Disable
