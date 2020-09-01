@@ -395,7 +395,7 @@ function GetDirectImageURL(_imageURL)
 {
     var imageURL = _imageURL;
     // supported imgur formats
-    var formats = [".jpeg", ".png", ".gif", ".apng", ".tiff", ".mp4", ".mpeg", ".avi", ".webm", ".quicktime", ".x-matroska", ".x-flv", ".x-msvideo", ".x-ms-wmv"];
+    var formats = [".jpeg", ".jpg", ".png", ".gif", ".apng", ".tiff", ".mp4", ".mpeg", ".avi", ".webm", ".quicktime", ".x-matroska", ".x-flv", ".x-msvideo", ".x-ms-wmv"];
     var formatExtension = imageURL.substr(imageURL.lastIndexOf("."));
     var usableFormat = formats.includes(formatExtension);
     
@@ -404,7 +404,9 @@ function GetDirectImageURL(_imageURL)
         // can expand if adding more supported sites
         var urlMap = "https://thumbs.redgifs.com/{{imageId}}-size_restricted.gif";
 
-        if(imageURL.includes("redgifs") || imageURL.includes("gifdeliverynetwork"))
+        if(imageURL.includes("gfycat")
+        || imageURL.includes("redgifs") 
+        || imageURL.includes("gifdeliverynetwork"))
         {
             // fetch the image Id and capitalise in line with gfycats format
             var imageId = imageURL.substr(imageURL.lastIndexOf("/") + 1);
