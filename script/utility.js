@@ -347,33 +347,40 @@ function ShowModalImage(src)
 {
     disableScroll();
 
-    document.getElementById("fixed-image").removeAttribute("hidden");
-    document.getElementById("fixed-video").setAttribute("hidden", "");
+    var imageElement = document.getElementById("fixed-image");
+    var videoElement = document.getElementById("fixed-video");
 
-    document.getElementById("fixed-image").setAttribute("src", src);
-    document.getElementById("fixed-video").setAttribute("src", "");
+    imageElement.removeAttribute("hidden");
+    videoElement.setAttribute("hidden", "");
+
+    imageElement.setAttribute("src", src);
+    videoElement.setAttribute("src", "");
 
     document.getElementById("fullscreen-frame").removeAttribute("hidden");
 
-    var imageElement = document.getElementById("fixed-image");
-    SetModalMediaStyle(imageElement, imageElement.naturalWidth, imageElement.naturalHeight);
+    imageElement.onload = function() {
+        SetModalMediaStyle(this, this.naturalWidth, this.naturalHeight);
+    }
 }
 
 function ShowModalVideo(src, time)
 {
     disableScroll();
 
-    document.getElementById("fixed-image").setAttribute("hidden", "");
-    document.getElementById("fixed-video").removeAttribute("hidden");
+    var imageElement = document.getElementById("fixed-image");
+    var videoElement = document.getElementById("fixed-video");
 
-    document.getElementById("fixed-image").setAttribute("src", "");
-    document.getElementById("fixed-video").setAttribute("src", src);
+    imageElement.setAttribute("hidden", "");
+    videoElement.removeAttribute("hidden");
+
+    imageElement.setAttribute("src", "");
+    videoElement.setAttribute("src", src);
 
     document.getElementById("fullscreen-frame").removeAttribute("hidden");
 
-    var videoElement = document.getElementById("fixed-video");
-    SetModalMediaStyle(videoElement, videoElement.videoWidth, videoElement.videoHeight);
-
+    videoElement.onloadeddata = function() {
+        SetModalMediaStyle(this, this.videoWidth, this.videoHeight);
+    };
 }
 
 // we cant have width and height changing to max purely controlled by css
