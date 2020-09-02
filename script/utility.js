@@ -433,7 +433,7 @@ function AlertSuccess(msg="Your action was successful") {
     alert.removeAttribute("hidden");
     setTimeout(function(){
         alert.setAttribute("hidden", "");
-    }, 5000);
+    }, 8000);
 }
 
 // display an error alert for 5 seconds
@@ -446,7 +446,7 @@ function AlertError(msg="There was an error") {
     alert.removeAttribute("hidden");
     setTimeout(function(){
         alert.setAttribute("hidden", "");
-    }, 5000);
+    }, 8000);
 }
 
 // there are some websites that we can get direct image links for even if they arent provided
