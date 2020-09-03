@@ -8,10 +8,11 @@ function CapitaliseWordsInString(string)
 {
     var inputString = string;
     var finalString = "";
-    var loopAgain;
-    var loops = 0;
 
-    do
+    var wordsFound = 0;
+    var loopAgain = true;
+
+    while(loopAgain && (wordsFound < 2))
     {
         loopAgain = false;
         // loop over each word listed (optimise with only looking at letters that begin with the same)
@@ -22,10 +23,11 @@ function CapitaliseWordsInString(string)
             // if first letters match and the input includes the word
             if(word.charAt(0) == inputString.charAt(0) && inputString.startsWith(word))
             {
+                console.log("found word " + word);
                 // if we find a word then we want to loop again
                 // however we dont want to loop more than 2 times
                 loopAgain = true;
-                loops += 1;
+                wordsFound += 1;
    
                 // remove the word from input
                 inputString = inputString.replace(word, "");
@@ -35,8 +37,11 @@ function CapitaliseWordsInString(string)
 
                 finalString += wordToAdd;
             }
+
+            if(wordsFound >= 2)
+                break;
         }
-    } while(loopAgain && loops < 2);
+    }
 
     // the remaining string can just be capitalised rather than searching again
     finalString += (inputString.charAt(0).toUpperCase() + inputString.slice(1));
