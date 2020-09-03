@@ -434,6 +434,7 @@ function AlertSuccess(msg="Your action was successful") {
     document.getElementById("alert-msg-success").innerHTML = msg;
 
     alert.removeAttribute("hidden");
+    ScrollToTop();
     setTimeout(function(){
         alert.setAttribute("hidden", "");
     }, 8000);
@@ -447,6 +448,7 @@ function AlertError(msg="There was an error") {
     document.getElementById("alert-msg-error").innerHTML = msg;
 
     alert.removeAttribute("hidden");
+    ScrollToTop();
     setTimeout(function(){
         alert.setAttribute("hidden", "");
     }, 8000);
