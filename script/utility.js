@@ -148,6 +148,8 @@ function CalculateProgress()
 // populate content columns with images
 function PopulateImages(inputArrImages)
 {
+    ClearContent();
+    
     // arrays are passed by value so make a copy
     var arrImages = JSON.parse(JSON.stringify(inputArrImages));
 
@@ -190,6 +192,7 @@ function PopulateImages(inputArrImages)
     mediaPopulating.displayOrder = selectedSort;
     mediaPopulating.mediaToLoad = arrImages.length;
     mediaPopulating.mediaLoaded = 0;
+    mediaPopulating.mediaArray = [];
 
     for(var i = 0; i < arrImages.length; i++)
     {

@@ -108,8 +108,6 @@ async function UploadImageURL(imageURL)
 // entry point for loading an album
 async function ActionLoadAlbum()
 {
-    ClearContent();
-
     // pull the album id from the input box
     var input = document.getElementById("inputLoadAlbum").value;
     var startOfId = input.indexOf("a/");
@@ -140,8 +138,6 @@ async function ActionLoadAlbum()
 // entry point for loading account images
 async function ActionLoadAccountImages()
 {
-    ClearContent();
-    
     // figure out how many pages we have to go through
     var imageCount = (await FetchAccountImageCount()).data;
     var pages = Math.ceil(imageCount/50);
