@@ -64,7 +64,6 @@ async function FetchAccountImageCount()
 // returns an array of images from a single page, uploaded by the authed account
 async function FetchAccountImages(page = 0)
 {
-    console.log("fetching account images");
     var myHeaders = new Headers();
     myHeaders.append("Authorization", "Bearer " + GetCurrentAccount().accessToken);
 
@@ -149,10 +148,6 @@ async function ActionLoadAccountImages()
     // otherwise, loop all pages and add all responses to an array
     else
     {
-        // make progress row visible
-        var rowProgress = document.getElementById("row-progress");
-        rowProgress.removeAttribute("hidden");
-
         for(var i = 0; i < pages; i++)
         {
             SetProgress("Pages: ", i, pages);
@@ -166,6 +161,8 @@ async function ActionLoadAccountImages()
         // reverse as we account fetches from newest to oldest
         allImages.reverse();
     }
+
+    document.getElementById("row-progress").setAttribute("hidden", "");
 
     // fill grid with images
     PopulateImages(allImages);
@@ -192,6 +189,8 @@ async function ActionUploadImageURL()
         AlertError("Error " + response.status + " : " + response.data.error.message);
 
     document.getElementById("inputUploadImage").value = "";
+
+    console.log(response);
 }
 
 function ActionReaccess()

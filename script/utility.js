@@ -4,6 +4,8 @@ var btnBackToTop;
 var mediaPopulating = { displayOrder:"", mediaToLoad:0, mediaLoaded:0, mediaArray:[] };
 var screenDimensions = { width:0, height:0 };
 
+var mediaSlideshow = { interval:null, inputArray:[], mediaCurrentlyDisplaying:0, playAgain:false};
+
 window.onload = function() {
     // fetch the back to top button for later use
     btnBackToTop = document.getElementById("btnBackToTop");
@@ -153,6 +155,16 @@ function PopulateImages(inputArrImages)
     // arrays are passed by value so make a copy
     var arrImages = JSON.parse(JSON.stringify(inputArrImages));
 
+    var slideshow = document.getElementById("checkSlideshow").checked;
+
+    if(!slideshow)
+        PopulateGallery(arrImages);
+    else
+        PopulateSlideshow(arrImages);
+}
+
+function PopulateGallery(arrImages)
+{
     // fetch selected sort
     var elementSort = document.getElementById("sortLoadAlbum");
     var selectedSort = elementSort.options[elementSort.selectedIndex].value;
@@ -233,6 +245,75 @@ function PopulateImages(inputArrImages)
         newMedia.id = i;
         newMedia.classList.add("card-img-top");
     }
+}
+
+function PopulateSlideshow(inputArrImages)
+{
+    // fetch selected sort
+    var elementSort = document.getElementById("sortLoadAlbum");
+    var displayOrder = elementSort.options[elementSort.selectedIndex].value;
+
+    // sort images appropriately
+    if(displayOrder == "newest")
+        inputArrImages.reverse();
+    else if(displayOrder == "oldest"){}
+    else if(displayOrder == "random")
+        ShuffleArray(inputArrImages);
+
+    mediaSlideshow.inputArray = inputArrImages;
+    StartSlideshow();
+
+}
+
+function StartSlideshow() {
+    SetSlideshow();
+    mediaSlideshow.interval = setInterval(SetSlideshow, 5000);
+}
+
+function StopSlideshow() {
+    clearInterval(mediaSlideshow.interval);
+}
+
+function SetSlideshow()
+{   
+    ShowModalMedia(mediaSlideshow.inputArray[mediaSlideshow.mediaCurrentlyDisplaying], function() {
+        var video = document.getElementById("fixed-video");
+        if(video.duration != null && video.duration*1000 > 5000) {
+            video.removeAttribute("loop");
+            clearInterval(mediaSlideshow.interval);
+            if(video.duration*1000 < 8000)
+                mediaSlideshow.playAgain = true;
+
+            video.onended = function() {
+                if(mediaSlideshow.playAgain == true)
+                {
+                    var video = document.getElementById("fixed-video");
+                    video.pause();
+                    video.currentTime = 0;
+                    video.play();
+                    mediaSlideshow.playAgain = false;
+                }
+                else if(mediaSlideshow.interval != null) {
+                    StartSlideshow();
+                }
+            };
+        }
+        else
+            video.setAttribute("loop",""); 
+    });
+    mediaSlideshow.mediaCurrentlyDisplaying = (mediaSlideshow.mediaCurrentlyDisplaying + 1) % mediaSlideshow.inputArray.length;
+}
+
+function ResetSlideshow()
+{
+    document.getElementById("fixed-video").setAttribute("loop", "");
+    document.getElementById("fixed-video").onended = null;
+    mediaSlideshow.mediaCurrentlyDisplaying = 0;
+    mediaSlideshow.inputArray = null;
+    if(mediaSlideshow.interval != null)
+        clearInterval(mediaSlideshow.interval);
+    mediaSlideshow.interval = null;
+    mediaSlideshow.playAgain = false;
 }
 
 // called when a single piece of media has loaded
@@ -329,6 +410,8 @@ function SetProgress(type, current, total)
     if(total != null)
         document.getElementById("progress-total").textContent = total;
 
+    document.getElementById("row-progress").removeAttribute("hidden");
+
     // set bar
     var percent = (current/total)*100;
     var progessBar = document.getElementById("loading-progress");
@@ -344,9 +427,19 @@ function HideModal()
     document.getElementById("fullscreen-frame").setAttribute("hidden", "");
 
     enableScroll();
+
+    ResetSlideshow();
 }
 
-function ShowModalImage(src)
+function ShowModalMedia(media, onload=null)
+{
+    if(media.type.includes("image"))
+        ShowModalImage(media.link, onload);
+    else if(media.type.includes("video"))
+        ShowModalVideo(media.link, onload);
+}
+
+function ShowModalImage(src, onload=null)
 {
     disableScroll();
 
@@ -362,11 +455,13 @@ function ShowModalImage(src)
     document.getElementById("fullscreen-frame").removeAttribute("hidden");
 
     imageElement.onload = function() {
+        if(onload != null)
+            onload();
         SetModalMediaStyle(this, this.naturalWidth, this.naturalHeight);
     }
 }
 
-function ShowModalVideo(src, time)
+function ShowModalVideo(src, onload=null)
 {
     disableScroll();
 
@@ -382,6 +477,8 @@ function ShowModalVideo(src, time)
     document.getElementById("fullscreen-frame").removeAttribute("hidden");
 
     videoElement.onloadeddata = function() {
+        if(onload != null)
+            onload();
         SetModalMediaStyle(this, this.videoWidth, this.videoHeight);
     };
 }
@@ -493,4 +590,12 @@ function GetDirectImageURL(_imageURL)
     }
     
     return imageURL;
+}
+
+function OnSlideshowChanged()
+{
+    var checkbox = document.getElementById("checkSlideshow");
+    var selectNumber = document.getElementById("selectDisplayCount");
+
+    selectNumber.disabled = !checkbox.checked;
 }
