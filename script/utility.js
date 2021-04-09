@@ -557,7 +557,7 @@ function GetDirectImageURL(_imageURL)
 {
     var imageURL = _imageURL;
     // supported imgur formats
-    var formats = [".jpeg", ".jpg", ".png", ".gif", ".apng", ".tiff", ".mpeg", ".avi", ".webm", ".quicktime", ".x-matroska", ".x-flv", ".x-msvideo", ".x-ms-wmv"];
+    var formats = [".jpeg", ".jpg", ".png", ".gif", ".gifv", ".apng", ".tiff", ".mpeg", ".avi", ".webm", ".quicktime", ".x-matroska", ".x-flv", ".x-msvideo", ".x-ms-wmv"];
     var formatExtension = imageURL.substr(imageURL.lastIndexOf("."));
     var usableFormat = formats.includes(formatExtension);
     
