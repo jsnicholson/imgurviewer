@@ -563,30 +563,9 @@ function GetDirectImageURL(_imageURL)
     
     if(!usableFormat)
     {
-        // imgur only supports .mp4 upload directly at their site which is frustrating
-        if(imageURL.includes(".mp4"))
-        {
-            AlertError("Error: Imgur only supports .mp4 directly via their desktop site. Please navigate there to upload");
-        }
-
-        // can expand if adding more supported sites
-        var urlMap = "https://thumbs.redgifs.com/{{imageId}}-size_restricted.gif";
-
-        if(imageURL.includes("gfycat")
-        || imageURL.includes("redgifs") 
-        || imageURL.includes("gifdeliverynetwork"))
-        {
-            // fetch the image Id and capitalise in line with gfycats format
-            var imageId = imageURL.substr(imageURL.lastIndexOf("/") + 1);
-            imageId = CapitaliseWordsInString(imageId);
-            imageURL = urlMap.replace("{{imageId}}", imageId)
-        }
-        else
-        {
-            // not a direct link and we dont have any special measures in place to extract it
-            AlertError("Error: not a direct file link and no special measure to fetch it")
-            return false;
-        }
+        // not a direct link and we dont have any special measures in place to extract it
+        AlertError("Error: not a direct file link and no special measure to fetch it")
+        return false;
     }
     
     return imageURL;
