@@ -1,4 +1,5 @@
 // global vars
+const params = new URLSearchParams(window.location.href);
 var jsonPreviousResponse={input:"", json:""};
 var btnBackToTop;
 var mediaPopulating = { displayOrder:"", mediaToLoad:0, mediaLoaded:0, mediaArray:[] };
@@ -11,13 +12,11 @@ window.onload = function() {
     btnBackToTop = document.getElementById("btnBackToTop");
 
     // check if we have an account set then set the account panel accordingly
-    const params = new URLSearchParams(window.location.hash);
     var currentAccount = GetCurrentAccount();
     if(currentAccount != null && Date.now() > currentAccount.expiry)
         LoggedOut();
     else if(currentAccount != null)
         LoggedIn();
-
 
     // in this case, we have been redirected from authentication
     if(params.has("account_id"))
@@ -46,6 +45,10 @@ window.onload = function() {
         
         LoggedIn();
     }
+    else if(params.has("album"))
+        ActionLoadAlbum(params.get("album"));
+    else if(params.has("a"))
+        ActionLoadAlbum(params.get("a"));
 
     screenDimensions.width = screen.width;
     screenDimensions.height = screen.height;
@@ -163,12 +166,23 @@ function PopulateImages(inputArrImages)
         PopulateSlideshow(arrImages);
 }
 
+function GetSortType()
+{
+    if(params.has("sort"))
+        return params.get("sort");
+    else if(params.has("s"))
+        return params.get("s");
+    else
+    {
+        var elementSort = document.getElementById("sortLoadAlbum");
+        return elementSort.options[elementSort.selectedIndex].value;
+    }
+}
+
 function PopulateGallery(arrImages)
 {
     // fetch selected sort
-    var elementSort = document.getElementById("sortLoadAlbum");
-    var selectedSort = elementSort.options[elementSort.selectedIndex].value;
-    displayOrder = selectedSort;
+    displayOrder = GetSortType();
 
     // sort images appropriately
     if(selectedSort == "newest")

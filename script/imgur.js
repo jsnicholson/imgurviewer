@@ -104,14 +104,19 @@ async function UploadImageURL(imageURL)
     return data;
 }
 
-// entry point for loading an album
-async function ActionLoadAlbum()
+async function ClickedLoadAlbum()
 {
     // pull the album id from the input box
     var input = document.getElementById("inputLoadAlbum").value;
     var startOfId = input.indexOf("a/");
     var albumId = input.substr(startOfId + 2);
 
+    ActionLoadAlbum(albumId);
+}
+
+// entry point for loading an album
+async function ActionLoadAlbum(albumId)
+{   
     var albumImages;
     // if we ran this request previously, use that output instead of requesting again
     if("a/"+albumId == jsonPreviousResponse.input)
