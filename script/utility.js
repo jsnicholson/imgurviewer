@@ -1,5 +1,5 @@
 // global vars
-const params = new URLSearchParams(window.location.href);
+const params = GetWindowParams();
 var jsonPreviousResponse={input:"", json:""};
 var btnBackToTop;
 var mediaPopulating = { displayOrder:"", mediaToLoad:0, mediaLoaded:0, mediaArray:[] };
@@ -82,6 +82,14 @@ screen.orientation.onchange = function (){
         SetModalMediaStyle(media, width, height);
     }
 };
+
+function GetWindowParams()
+{
+    var url = window.location.href;
+    var startOfParams = url.indexOf("?");
+    var strParams = url.substr(startOfParams);
+    return new URLSearchParams(strParams);
+}
 
 function ShuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -182,7 +190,7 @@ function GetSortType()
 function PopulateGallery(arrImages)
 {
     // fetch selected sort
-    displayOrder = GetSortType();
+    var selectedSort = GetSortType();
 
     // sort images appropriately
     if(selectedSort == "newest")
