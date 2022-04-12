@@ -45,7 +45,8 @@ window.onload = function() {
         
         LoggedIn();
     }
-    else if(params.has("album"))
+
+    if(params.has("album"))
         ActionLoadAlbum(params.get("album"));
     else if(params.has("a"))
         ActionLoadAlbum(params.get("a"));
@@ -176,14 +177,40 @@ function PopulateImages(inputArrImages)
 
 function GetSortType()
 {
-    if(params.has("sort"))
-        return params.get("sort");
-    else if(params.has("s"))
-        return params.get("s");
+    if(params.has("sort")) {
+        var type = params.get("sort");
+        SetSortTypeDOM(type);
+        return type;
+    }
+    else if(params.has("s")) {
+        var type = params.get("s");
+        SetSortTypeDOM(type);
+        return type;
+    }
     else
     {
         var elementSort = document.getElementById("sortLoadAlbum");
         return elementSort.options[elementSort.selectedIndex].value;
+    }
+}
+
+function SetSortTypeDOM(sortType)
+{
+    var sortDropdown = document.getElementById("sortLoadAlbum");
+    switch(sortType)
+    {
+        case "newest":
+            sortDropdown.selectedIndex = 0;
+            break;
+        case "oldest":
+            sortDropdown.selectedIndex = 1;
+            break;
+        case "random":
+            sortDropdown.selectedIndex = 2;
+            break;
+        default:
+            sortDropdown.selectedIndex = 0;
+            break;
     }
 }
 
