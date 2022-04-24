@@ -87,7 +87,7 @@ screen.orientation.onchange = function (){
 function GetWindowParams()
 {
     var url = window.location.href;
-    var startOfParams = url.indexOf("?");
+    var startOfParams = url.indexOf("#");
     var strParams = url.substr(startOfParams);
     return new URLSearchParams(strParams);
 }
