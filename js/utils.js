@@ -6,7 +6,8 @@ export {
     ArrayOfNumbersUpToN,
     LoggedIn,
     LoggedOut,
-    ScrollToTop
+    ScrollToTop,
+    ClearContent
 };
 
 function HandleParams() {
@@ -40,18 +41,19 @@ function GetCurrentAccount() {
     return JSON.parse(window.localStorage.getItem("current_account"));
 }
 
-function ShuffleArray(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-      let j = Math.floor(Math.random() * (i + 1)); // random index from 0 to i
+function ShuffleArray(array, lowerLimit = 0) {
+    for (let i = array.length - 1; i > lowerLimit; i--) {
+      let j = Math.floor(Math.random() * (i + 1)) + lowerLimit; // random index from 0 to i
       [array[i], array[j]] = [array[j], array[i]];
     }
 }
 
 function AddToShortestColumn(media) {
     // get all 3 columns
-    var contentColumns = [];
-    for(var i = 1; i < 4; i++)
-        contentColumns.push(document.getElementById("content-col-" + i));
+    var contentColumns = []; 
+    contentColumns.push(document.getElementById("content-col-1"));
+    contentColumns.push(document.getElementById("content-col-2"));
+    contentColumns.push(document.getElementById("content-col-3"));
 
     // sort columns by height
     contentColumns.sort(function(a, b) {
@@ -88,9 +90,15 @@ function LoggedOut() {
 
 function ClearContent() {
     let contentSingle = document.getElementById("content-single");
-    let contentGallery = document.getElementById("content-gallery");
+    let contentGalleryColumns = [];
+    contentGalleryColumns.push(document.getElementById("content-col-1"));
+    contentGalleryColumns.push(document.getElementById("content-col-2"));
+    contentGalleryColumns.push(document.getElementById("content-col-3"));
+
     contentSingle.innerHTML="";
-    contentGallery.innerHTML="";
+    contentGalleryColumns[0].innerHTML="";
+    contentGalleryColumns[1].innerHTML="";
+    contentGalleryColumns[2].innerHTML="";
 }
 
 function ScrollToTop() {

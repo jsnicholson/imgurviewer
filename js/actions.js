@@ -19,11 +19,15 @@ function ActionAuthorise() {
 }
 
 async function ActionLoadAccountImages() {
+    ResetMediaObj();
+    utils.ClearContent();
+
+    document.getElementById("buttonLoadAccountImages").innerHTML = "Load Account Images Again";
+
     const imageCount = (await imgur.FetchAccountImageCount()).data;
     const pageCount = Math.ceil(imageCount/constants.PAGE_SIZE);
     let pageOrder = utils.ArrayOfNumbersUpToN(pageCount);
     utils.ShuffleArray(pageOrder);
-    console.log("first page:" + pageOrder[0]);
     for(let i = 0; i < pageOrder.length; i++) {
         imgur.FetchAccountImages(i).then(
             function(response) {HandleAccountImageResponseData(response.data)},
@@ -42,7 +46,6 @@ function ActionLoadMoreMedia() {
 
         let mediaNew;
         let fileInfo = mediaObj.resultArray[i];
-        
         if(fileInfo.type.includes("image")){
             mediaNew = new Image()
             mediaNew.onload = function() {
@@ -57,6 +60,10 @@ function ActionLoadMoreMedia() {
             mediaNew.setAttribute("autoplay","");
             mediaNew.setAttribute("loop","");
             mediaNew.muted = true;
+
+            if(fileInfo.type.includes("mp4")) {
+                mediaNew.classList.add("media-mp4");
+            }
         }
 
         mediaNew.src = fileInfo.link;
@@ -86,7 +93,6 @@ function HandleAccountImageResponseData(data) {
 function SingleMediaLoaded(media, i) {
     mediaObj.mediaLoaded++;
     //mediaObj.mediaArray.push(media);
-    //utils.AddToShortestColumn(media);
     if(constants.MEDIA_QUERY_SM.matches) {
         let contentSingle = document.getElementById("content-single");
         contentSingle.appendChild(media);
@@ -105,4 +111,11 @@ function GetIsReadyForMoreMedia() {
 
 function SetIsReadyForMoreMedia(bool) {
     isReadyForMoreMedia = bool;
+}
+
+function ResetMediaObj() {
+    mediaObj.pageOrder=[];
+    mediaObj.mediaLoaded=0;
+    mediaObj.mediaToBeLoaded=0;
+    mediaObj.resultArray=[];
 }

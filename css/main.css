@@ -3,6 +3,11 @@
 .media {
     width:100%;
 }
+
+.media-mp4 {
+    margin-bottom:-10px;
+}
+
 /* id */
 #btnBackToTop {
 	display: none; /* Hidden by default */
