@@ -10,6 +10,8 @@ export {
     ClearContent
 };
 
+import * as constants from "/js/constants.js"
+
 function HandleParams() {
     const params = GetWindowParams();
     // user has just authorised and been returned from imgur
@@ -79,6 +81,10 @@ function LoggedIn() {
     let buttonLogOut = document.getElementById("buttonLogOut");
     buttonAuthorise.classList.add("d-none");
     buttonLogOut.classList.remove("d-none");
+
+    const textAccount = document.getElementById("paragraphAccount");
+    const text = constants.TEXT_SIGNED_IN_AS.replace("{username}", GetCurrentAccount().username);
+    textAccount.innerHTML = text;
 }
 
 function LoggedOut() {
@@ -86,6 +92,9 @@ function LoggedOut() {
     let buttonLogOut = document.getElementById("buttonLogOut");
     buttonAuthorise.classList.remove("d-none");
     buttonLogOut.classList.add("d-none");
+
+    const textAccount = document.getElementById("paragraphAccount");
+    textAccount.innerHTML = constants.TEXT_NOT_SIGNED_IN;
 }
 
 function ClearContent() {
