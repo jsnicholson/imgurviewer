@@ -118,6 +118,5 @@ function ScrollToTop() {
 
 function GetSortOrder() {
     const sortSelect = document.getElementById("selectSortOrder");
-    console.log(sortSelect.value);
     return sortSelect.value;
 }
