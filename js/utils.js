@@ -7,7 +7,8 @@ export {
     LoggedIn,
     LoggedOut,
     ScrollToTop,
-    ClearContent
+    ClearContent,
+    GetSortOrder
 };
 
 import * as constants from "/js/constants.js"
@@ -113,4 +114,10 @@ function ClearContent() {
 function ScrollToTop() {
     document.body.scrollTop = 0; // For Safari
     document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+}
+
+function GetSortOrder() {
+    const sortSelect = document.getElementById("selectSortOrder");
+    console.log(sortSelect.value);
+    return sortSelect.value;
 }

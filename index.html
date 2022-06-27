@@ -26,7 +26,7 @@
     </head>
     <body>
         <main class="container">
-            <section id="options">
+            <section id="options" class="mt-2">
                 <div class="accordion" id="accordionExample">
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingOne">
@@ -63,20 +63,34 @@
                         </h2>
                         <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
                             <div class="accordion-body">
-                                <strong>This is the third item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                                <select id="selectSortOrder" class="form-select" aria-label="display option select">
+                                    <option selected value="newest">Newest first</option>
+                                    <option value="oldest">Oldest first</option>
+                                    <option value="random">Random</option>
+                                </select>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
-            <section id="content">
+            <section id="sectionAlerts" class="mt-2">
+                <div id="alert-danger" class="alert alert-dismissible alert-danger" hidden>
+                    <span id="alert-msg-danger">Danger!</span>
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>   
+                </div>
+                <div id="alert-success" class="alert alert-dismissible alert-success" hidden>
+                    <span id="alert-msg-success">Success!</span>
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                </div>
+            </section>
+            <section id="content" class="mt-2">
                 <div id="content-single" class="row no-gutters justify-content-center">
                     <div id="content-col" class="col-lg-6 col-md-6 col-sm-12"></div>
                 </div>
                 <div id="content-gallery" class="row no-gutters">
-                    <div class="col-lg-4 col-md-6 col-sm-12"><div id="content-col-1"></div></div>
-                    <div class="col-lg-4 col-md-6 col-sm-12"><div id="content-col-2"></div></div>
-                    <div class="col-lg-4 col-md-6 col-sm-12"><div id="content-col-3"></div></div>
+                    <div class="col-lg-4 col-md-6 col-sm-12 p-0"><div id="content-col-1"></div></div>
+                    <div class="col-lg-4 col-md-6 col-sm-12 p-0"><div id="content-col-2"></div></div>
+                    <div class="col-lg-4 col-md-6 col-sm-12 p-0"><div id="content-col-3"></div></div>
                 </div>
             </section>
         </main>

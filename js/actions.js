@@ -27,6 +27,36 @@ async function ActionLoadAccountImages() {
     const imageCount = (await imgur.FetchAccountImageCount()).data;
     const pageCount = Math.ceil(imageCount/constants.PAGE_SIZE);
     let pageOrder = utils.ArrayOfNumbersUpToN(pageCount);
+
+    const sortOrder = utils.GetSortOrder();
+    switch(sortOrder) {
+        case "newest":
+            FetchAccountImagesNewest(pageOrder);
+            break;
+        case "oldest":
+            FetchAccountImagesOldest(pageOrder);
+            break;
+        case "random":
+            FetchAccountImagesRandom(pageOrder);
+            break;
+        default:
+            break;
+    }
+}
+
+async function FetchAccountImagesNewest(pageOrder) {
+    for(let i = 0; i < pageOrder.length; i++) {
+        const response = await imgur.FetchAccountImages(i);
+        HandleAccountImageResponseData(response.data);
+    }
+}
+
+async function FetchAccountImagesOldest(pageOrder) {
+    FetchAccountImagesNewest(pageOrder);
+    mediaObj.resultArray.reverse();
+}
+
+async function FetchAccountImagesRandom(pageOrder) {
     utils.ShuffleArray(pageOrder);
     for(let i = 0; i < pageOrder.length; i++) {
         imgur.FetchAccountImages(i).then(
@@ -91,7 +121,9 @@ function HandleAccountImageResponseData(data) {
 
     mediaObj.pagesLoaded++;
     mediaObj.resultArray=mediaObj.resultArray.concat(data);
-    utils.ShuffleArray(mediaObj.resultArray);
+
+    if(utils.GetSortOrder() == "random")
+        utils.ShuffleArray(mediaObj.resultArray);
 
     if(first)
         ActionLoadMoreMedia();
