@@ -2,7 +2,7 @@ export {
     ComposeContentColumns
 };
 
-import * as build from "/js/build.js";
+import * as build from "imgurviewer/js/build.js";
 
 function ComposeContentColumns(numCols) {
     let containerContent = document.getElementById("content-gallery");
