@@ -1,7 +1,13 @@
+/*
+    imgur.js holds function for direct api calls to Imgur
+*/
+
 export {
+    InitAbortSignal,
+    AbortExistingCalls,
     Authorise,
     FetchAccountImageCount,
-    FetchAccountImages
+    FetchPageOfAccountImages,
 };
 
 import {
@@ -11,6 +17,18 @@ import {
     ENDPOINT_ACCOUNT_IMAGES
 } from  "/js/constants.js";
 import {GetCurrentAccount} from "/js/utils.js";
+import {HandleError} from "/js/process.js";
+
+let abort = {controller:{},signal:{}};
+
+function InitAbortSignal() {
+    abort.controller = new AbortController();
+    abort.signal = abort.controller.signal;
+}
+
+function AbortExistingCalls() {
+    abort.controller.abort();
+}
 
 function Authorise() {
     let endpointAuthoriseLocation = ENDPOINT_AUTHORISE.replace("{{clientId}}", CLIENT_ID);
@@ -23,24 +41,26 @@ async function FetchAccountImageCount() {
     const requestOptions = {
         method:"GET",
         headers:headers,
-        redirect:"follow"
+        redirect:"follow",
+        signal:abort.signal
     };
 
-    const response = await fetch(ENDPOINT_ACCOUNT_IMAGE_COUNT, requestOptions);
-    return await response.json();
+    const response = await fetch(ENDPOINT_ACCOUNT_IMAGE_COUNT, requestOptions).catch(e => HandleError(e));
+    return await response?.json();
 }
 
-async function FetchAccountImages(page = 0) {
+async function FetchPageOfAccountImages(page = 0) {
     let headers = new Headers();
     headers.append("Authorization", "Bearer "+GetCurrentAccount().accessToken);
 
     const requestOptions = {
         method:"GET",
         headers:headers,
-        redirect:"follow"
+        redirect:"follow",
+        signal:abort.signal
     };
 
     const endpoint = ENDPOINT_ACCOUNT_IMAGES.replace("{{page}}", page);
-    const response = await fetch(endpoint, requestOptions);
-    return await response.json();
+    const response = await fetch(endpoint, requestOptions).catch(e => HandleError(e));
+    return await response?.json();
 }

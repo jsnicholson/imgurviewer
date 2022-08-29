@@ -2,16 +2,21 @@ export {
     HandleParams,
     GetCurrentAccount,
     ShuffleArray,
-    AddToShortestColumn,
+    AddMediaToGallery,
     ArrayOfNumbersUpToN,
     LoggedIn,
     LoggedOut,
     ScrollToTop,
     ClearContent,
-    GetSortOrder
+    GetDisplayOptions,
+    IsValidGifUrl,
+    SetupContentColumns,
+    ChangeText,
+    ShowAlert
 };
 
 import * as constants from "/js/constants.js"
+import * as compose from "/js/compose.js";
 
 function HandleParams() {
     const params = GetWindowParams();
@@ -51,27 +56,31 @@ function ShuffleArray(array, lowerLimit = 0) {
     }
 }
 
+function AddMediaToGallery(media) {
+    AddToShortestColumn(media);
+}
+
 function AddToShortestColumn(media) {
-    // get all 3 columns
-    var contentColumns = []; 
-    contentColumns.push(document.getElementById("content-col-1"));
-    contentColumns.push(document.getElementById("content-col-2"));
-    contentColumns.push(document.getElementById("content-col-3"));
+    // get all content columns
+    let contentColumns = Array.from(document.querySelectorAll(".content-col"));
+    let contentWrappers = [];
+    for(const contentColumn of contentColumns)
+        contentWrappers.push(contentColumn.querySelector(".content"));
 
     // sort columns by height
-    contentColumns.sort(function(a, b) {
+    contentWrappers.sort(function(a, b) {
         var heightA = a.getBoundingClientRect().height;
         var heightB = b.getBoundingClientRect().height;
         return heightA - heightB;
     });
     
     // place media in shortest
-    contentColumns[0].appendChild(media);
+    contentWrappers[0].appendChild(media);
 }
 
 function ArrayOfNumbersUpToN(n) {
     let arr = [];
-    for(let i = 1; i <= n; i++) {
+    for(let i = 0; i <= n; i++) {
         arr.push(i)
     }
     return arr;
@@ -99,16 +108,9 @@ function LoggedOut() {
 }
 
 function ClearContent() {
-    let contentSingle = document.getElementById("content-single");
-    let contentGalleryColumns = [];
-    contentGalleryColumns.push(document.getElementById("content-col-1"));
-    contentGalleryColumns.push(document.getElementById("content-col-2"));
-    contentGalleryColumns.push(document.getElementById("content-col-3"));
-
-    contentSingle.innerHTML="";
-    contentGalleryColumns[0].innerHTML="";
-    contentGalleryColumns[1].innerHTML="";
-    contentGalleryColumns[2].innerHTML="";
+    document.querySelector("#content-gallery").innerHTML="";
+    document.getElementById("buttonLoadMoreMedia").setAttribute("hidden","");
+    document.getElementById("spinnerLoadingContainer").setAttribute("hidden","");
 }
 
 function ScrollToTop() {
@@ -116,7 +118,54 @@ function ScrollToTop() {
     document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
 }
 
-function GetSortOrder() {
+function GetDisplayOptions() {
     const sortSelect = document.getElementById("selectSortOrder");
-    return sortSelect.value;
+    const checkAutomaticallyLoadMoreMedia = document.getElementById("checkAutoLoadMoreMedia");
+    return {
+        sortOrder:sortSelect.value,
+        automaticallyLoadMoreMedia:checkAutomaticallyLoadMoreMedia.checked
+    };
+}
+
+function IsValidGifUrl(url) {
+    if(!url.includes(".gif")) {
+        console.log(`${url} is not a link to a gif`);
+        return false;
+    }
+
+    let indexOfExtension = url.lastIndexOf(".gif");
+    let indexOfId = url.lastIndexOf(".com/");
+
+    let idLength = url.slice(indexOfId+5,indexOfExtension).length;
+    return (idLength == 7) ? true : false;
+}
+
+function ChangeText(map) {
+    for(const [selector, text] of map) {
+        const elems = document.querySelectorAll(selector);
+        for(const elem of elems)
+            elem.textContent = text;
+    }
+}
+
+function SetupContentColumns() {
+    const containerWidth = document.querySelector("#content-gallery").offsetWidth;
+
+    let numCols;
+    if(containerWidth <= constants.BREAKPOINT_SM)
+        numCols = 1;
+    else if(containerWidth <= constants.BREAKPOINT_MD)
+        numCols = 2;
+    else
+        numCols = 3;
+
+    compose.ComposeContentColumns(numCols);
+}
+
+function ShowAlert(type, message) {
+    let alert = document.getElementById("alert");
+    let alertMessage = document.getElementById("alert-msg");
+    alertMessage.textContent = message;
+    alert.setAttribute("class",`alert alert-dismissible ${constants.ERRORMAP_TYPE_TO_CLASS.get(type)}`);
+    alert.removeAttribute("hidden");
 }
