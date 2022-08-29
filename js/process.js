@@ -9,10 +9,10 @@ export {
     SetIsReadyForMoreMedia
 };
 
-import * as utils from "/js/utils.js";
-import * as actions from "/js/actions.js";
-import * as constants from "/js/constants.js";
-import * as build from "/js/build.js";
+import * as utils from "/imgurviewer/js/utils.js";
+import * as actions from "/imgurviewer/js/actions.js";
+import * as constants from "/imgurviewer/js/constants.js";
+import * as build from "/imgurviewer/js/build.js";
 
 let mediaObj = {mediaLoaded:0, mediaToBeLoaded:0, mediaArray:[], pagesLoaded:0, isReadyForMoreMedia:true, mediaElements:[]};
 let displayOptions = {sortOrder:"", automaticallyLoadMoreMedia:false};

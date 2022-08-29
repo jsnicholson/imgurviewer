@@ -15,8 +15,8 @@ export {
     ShowAlert
 };
 
-import * as constants from "/js/constants.js"
-import * as compose from "/js/compose.js";
+import * as constants from "/imgurviewer/js/constants.js"
+import * as compose from "/imgurviewer/js/compose.js";
 
 function HandleParams() {
     const params = GetWindowParams();
