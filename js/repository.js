@@ -1,6 +1,6 @@
 export {
     GetAccountImageCount,
-    GetAllAccountImagesWithSortOrder,
+    GetAllAccountImages,
     AbortExistingCallsIfExist
 };
 
@@ -15,7 +15,7 @@ async function GetAccountImageCount() {
     return (await imgur.FetchAccountImageCount()).data;
 }
 
-async function GetAllAccountImagesWithSortOrder() {
+async function GetAllAccountImages() {
     results = {data:[],pagesLoaded:0};
     imgur.InitAbortSignal();
 
@@ -58,15 +58,18 @@ async function GetPagesOfAccountImages(arrPageOrder) {
     for(let i = 0; i < arrPageOrder.length; i++) {
         const pageNum = arrPageOrder[i];
         const response = await GetPageOfAccountImages(pageNum);
-        if(!response || response == null || response == undefined) {
-            return;
-        }
-        if(utils.GetDisplayOptions().sortOrder == "oldest")
-            response.data.reverse();
-        results.data=results.data.concat(response.data);
-        results.pagesLoaded++;
-        events.DispatchEventPageOfResultsLoaded(response.data, pageNum);
+        CompleteGetRequest(response);
     }
+}
+
+function CompleteGetRequest(response) {
+    if(!response || response == null || response == undefined)
+        return;
+    if(utils.GetDisplayOptions().sortOrder == "oldest")
+        response.data.reverse();
+    results.data=results.data.concat(response.data);
+    results.pagesLoaded++;
+    events.DispatchEventPageOfResultsLoaded(response.data);
 }
 
 async function GetPageOfAccountImages(pageNum) {

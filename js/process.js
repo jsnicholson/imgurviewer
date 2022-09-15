@@ -6,7 +6,8 @@ export {
     InitMediaObj,
     GetDisplayOptions,
     GetIsReadyForMoreMedia,
-    SetIsReadyForMoreMedia
+    SetIsReadyForMoreMedia,
+    HandleInputAlbumIdChange
 };
 
 import * as utils from "/js/utils.js";
@@ -66,9 +67,6 @@ function SingleMediaLoaded(media) {
 
 function HandleError(error) {
     console.log(`there was an error: ${error}`);
-    console.log(typeof(error));
-    console.log(error);
-    console.log(JSON.stringify(error));
     utils.ShowAlert("danger", constants.ERROR_FETCH_ABORTED);
 }
 
@@ -95,4 +93,8 @@ function GetIsReadyForMoreMedia() {
 
 function SetIsReadyForMoreMedia(bool) {
     mediaObj.isReadyForMoreMedia = bool;
+}
+
+function HandleInputAlbumIdChange(event) {
+    let value = event.target.value;
 }

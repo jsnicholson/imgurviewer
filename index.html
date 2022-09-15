@@ -51,7 +51,10 @@
                         </h2>
                         <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
                             <div class="accordion-body">
-                                <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="inputAlbumId" placeholder="Album link/id" pattern="[a-zA-Z0-9]{5,}" aria-label="Album link/id" aria-describedby="button-addon2">
+                                    <button class="btn btn-primary" type="button" id="buttonLoadAlbumImages" onclick="window.LoadAlbumImages()" disabled>Load album images</button>
+                                  </div>
                             </div>
                         </div>
                     </div>
