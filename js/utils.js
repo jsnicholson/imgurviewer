@@ -17,10 +17,10 @@ export {
     SetupForMedia
 };
 
-import * as constants from "/js/constants.js"
-import * as compose from "/js/compose.js";
-import * as repository from "/js/repository.js";
-import * as process from "/js/process.js";
+import * as constants from "/imgurviewer/js/constants.js"
+import * as compose from "/imgurviewer/js/compose.js";
+import * as repository from "/imgurviewer/js/repository.js";
+import * as process from "/imgurviewer/js/process.js";
 
 function HandleParams() {
     const params = GetWindowParams();

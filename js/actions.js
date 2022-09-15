@@ -10,10 +10,10 @@ export {
     ActionLoadMoreMedia,
 };
 
-import * as constants from "/js/constants.js";
-import * as utils from "/js/utils.js";
-import * as process from "/js/process.js";
-import * as repository from "/js/repository.js";
+import * as constants from "/imgurviewer/js/constants.js";
+import * as utils from "/imgurviewer/js/utils.js";
+import * as process from "/imgurviewer/js/process.js";
+import * as repository from "/imgurviewer/js/repository.js";
 
 function ActionAuthorise() {
     imgur.Authorise();
