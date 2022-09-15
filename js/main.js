@@ -38,6 +38,10 @@ window.LoadAccountImages = function() {
     actions.ActionLoadAccountImages();
 }
 
+window.LoadAlbumImages = function() {
+    actions.ActionLoadAlbumImages();
+}
+
 window.LogOut = function() {
     actions.ActionLogOut();
 }
@@ -58,4 +62,7 @@ window.DismissAlert = function(alert) {
 function SetupEventListeners() {
     document.querySelector("#content-gallery").addEventListener("eventPageOfResultsLoaded", (event) =>
         process.HandleEventPageOfResultsLoaded(event));
+
+    document.querySelector("#inputAlbumId").addEventListener("input", (event) =>
+        process.HandleInputAlbumIdChange(event));
 }

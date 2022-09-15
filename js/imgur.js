@@ -8,12 +8,15 @@ export {
     Authorise,
     FetchAccountImageCount,
     FetchPageOfAccountImages,
+    FetchAlbumImages
 };
 
 import {
     CLIENT_ID,
     ENDPOINT_AUTHORISE,
     ENDPOINT_ACCOUNT_IMAGE_COUNT,
+    ENDPOINT_ACCOUNT_IMAGES,
+    ENDPOINT_ALBUM_IMAGES,
     ENDPOINT_ACCOUNT_IMAGES
 } from  "/imgurviewer/js/constants.js";
 import {GetCurrentAccount} from "/imgurviewer/js/utils.js";
@@ -61,6 +64,22 @@ async function FetchPageOfAccountImages(page = 0) {
     };
 
     const endpoint = ENDPOINT_ACCOUNT_IMAGES.replace("{{page}}", page);
+    const response = await fetch(endpoint, requestOptions).catch(e => HandleError(e));
+    return await response?.json();
+}
+
+async function FetchAlbumImages(id) {
+    let headers = new Headers();
+    headers.append("Authorization", "Bearer " + GetCurrentAccount().accessToken);
+
+    const requestOptions = {
+        method:"GET",
+        headers:headers,
+        redirect:"follow",
+        signal:abort.signal
+    };
+
+    const endpoint = ENDPOINT_ALBUM_IMAGES.replace("{{albumHash}}", id);
     const response = await fetch(endpoint, requestOptions).catch(e => HandleError(e));
     return await response?.json();
 }

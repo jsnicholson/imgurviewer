@@ -12,11 +12,15 @@ export {
     IsValidGifUrl,
     SetupContentColumns,
     ChangeText,
-    ShowAlert
+    ShowAlert,
+    InputToAlbumId,
+    SetupForMedia
 };
 
 import * as constants from "/imgurviewer/js/constants.js"
 import * as compose from "/imgurviewer/js/compose.js";
+import * as repository from "/imgurviewer/js/repository.js";
+import * as process from "/imgurviewer/js/process.js";
 
 function HandleParams() {
     const params = GetWindowParams();
@@ -168,4 +172,20 @@ function ShowAlert(type, message) {
     alertMessage.textContent = message;
     alert.setAttribute("class",`alert alert-dismissible ${constants.ERRORMAP_TYPE_TO_CLASS.get(type)}`);
     alert.removeAttribute("hidden");
+}
+
+function InputToAlbumId() {
+    let value = document.querySelector("#inputAlbumId").value;
+    if(value.includes("/")) {
+        let lastSlash = value.lastIndexOf("/");
+        return value.slice(lastSlash);
+    } else
+        return value;
+}
+
+function SetupForMedia() {
+    repository.AbortExistingCallsIfExist();
+    process.InitMediaObj();
+    ClearContent();
+    SetupContentColumns();
 }
