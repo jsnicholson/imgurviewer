@@ -14,6 +14,7 @@ import * as constants from "/imgurviewer/js/constants.js";
 import * as utils from "/imgurviewer/js/utils.js";
 import * as process from "/imgurviewer/js/process.js";
 import * as repository from "/imgurviewer/js/repository.js";
+import * as imgur from "/imgurviewer/imgur.js";
 
 function ActionAuthorise() {
     imgur.Authorise();
