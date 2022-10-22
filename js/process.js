@@ -47,7 +47,8 @@ function LoadMoreMedia() {
         let media = build.BuildMediaWithSkeleton(fileInfo);
         mediaObj.mediaElements.push(media);
 
-        utils.AddMediaToGallery(media);
+        if(!utils.GetDisplayOptions.onlyAddMediaOnceLoaded)
+            utils.AddMediaToGallery(media);
     }
 }
 
@@ -55,6 +56,9 @@ function SingleMediaLoaded(media) {
     mediaObj.mediaLoaded++;
 
     media.parentNode.classList.remove("media-loading");
+
+    if(utils.GetDisplayOptions.onlyAddMediaOnceLoaded)
+        utils.AddMediaToGallery(media);
 
     if(mediaObj.mediaLoaded == mediaObj.mediaToBeLoaded) {
         mediaObj.isReadyForMoreMedia = true;

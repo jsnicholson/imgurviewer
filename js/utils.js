@@ -14,13 +14,25 @@ export {
     ChangeText,
     ShowAlert,
     InputToAlbumId,
-    SetupForMedia
+    SetupForMedia,
+    OpenFullscreenMedia,
+    EnableScroll,
+    DisableScroll,
+    IsChildOf,
+    RemoveFileExtension,
+    GetJsonTags,
+    JsonDataToBlob,
+    DownloadBlob,
+    LoadJsonFileToTags,
+    LoadTagFileIfSelected
 };
 
 import * as constants from "/imgurviewer/js/constants.js"
 import * as compose from "/imgurviewer/js/compose.js";
 import * as repository from "/imgurviewer/js/repository.js";
 import * as process from "/imgurviewer/js/process.js";
+import * as tags from "/imgurviewer/js/tagfile.js";
+import BsTags from "/imgurviewer/vendor/bstags/js/tags.js";
 
 function HandleParams() {
     const params = GetWindowParams();
@@ -125,9 +137,11 @@ function ScrollToTop() {
 function GetDisplayOptions() {
     const sortSelect = document.getElementById("selectSortOrder");
     const checkAutomaticallyLoadMoreMedia = document.getElementById("checkAutoLoadMoreMedia");
+    const checkOnlyAddMediaOnceLoaded = document.getElementById("checkOnlyAddMediaOnceLoaded");
     return {
         sortOrder:sortSelect.value,
-        automaticallyLoadMoreMedia:checkAutomaticallyLoadMoreMedia.checked
+        automaticallyLoadMoreMedia:checkAutomaticallyLoadMoreMedia.checked,
+        onlyAddMediaOnceLoaded:checkOnlyAddMediaOnceLoaded.checked
     };
 }
 
@@ -188,4 +202,132 @@ function SetupForMedia() {
     process.InitMediaObj();
     ClearContent();
     SetupContentColumns();
+}
+
+function OpenFullscreenMedia(media) {
+    DisableScroll();
+    const section = document.querySelector("#sectionContentFullscreen");
+    const container = document.querySelector("#fullscreenMediaContainer");
+    while(container.firstChild)
+        container.removeChild(container.lastChild);
+    const newMedia = media.cloneNode();
+    container.appendChild(newMedia);
+    section.removeAttribute("hidden");
+    const sourceTextBox = document.querySelector("#inputSource");
+    sourceTextBox.value = RemoveFileExtension(newMedia.src);
+    const buttonGoToSource = document.querySelector("#buttonGoToSource");
+    buttonGoToSource.setAttribute("href", sourceTextBox.value);
+    const selectTags = document.querySelector("#selectTagsMedia");
+    const id = ImgurUrlToId(newMedia.src);
+    selectTags.setAttribute("data-tags-for", id);
+    const tagInstance = BsTags.getInstance(document.querySelector("#selectTagsMedia"));
+    tagInstance.reset();
+    const dataTags = tags.GetAllTagData()[id];
+    if(dataTags) {
+        for(const tag of dataTags.tags) {
+            tagInstance.addItem(tag);
+        }
+    }
+    tagInstance._adjustWidth();
+}
+
+function ResetFullscreenMedia() {
+    const container = document.querySelector("#fullscreenMediaContainer");
+    while(container.firstChild)
+        container.removeChild(container.lastChild);
+}
+
+function SetFullscreenMedia(media) {
+    const container = document.querySelector("#fullscreenMediaContainer");
+    const newMedia = media.cloneNode();
+    container.append(newMedia);
+}
+
+function SetFullscreenMediaDetailsSource(media) {
+    const sourceTextBox = document.querySelector("#inputSource");
+    sourceTextBox.value = RemoveFileExtension(media.src);
+    const buttonGoToSource = document.querySelector("#buttonGoToSource");
+    buttonGoToSource.setAttribute("href", sourceTextBox.value);
+}
+
+function SetFullscreenMediaDetailsTags(media) {
+    const selectTags = document.getElementById("selectTagsMedia");
+    const tagInstance = BsTags.getInstance(document.getElementById("selectTagsMedia"));
+    const id = ImgurUrlToId(media.src);
+    selectTags.setAttribute("data-tags-for", id);
+    
+    tagInstance.reset();
+    const dataTags = tags.GetAllTagData()[id];
+    if(dataTags) {
+        for(const tag of dataTags.tags) {
+            tagInstance.addItem(tag);
+        }
+    }
+    tagInstance._adjustWidth();
+}
+
+function EnableScroll() {
+    document.body.classList.remove("prevent-scrolling");
+}
+
+function DisableScroll() {
+    const body = document.body;
+    if(body)
+        document.body.classList.add("prevent-scrolling");
+}
+
+function IsChildOf(childNode, parentId) {
+    while(childNode.parentNode) {
+        if(childNode.parentNode.id == parentId)
+            return true;
+        childNode = childNode.parentNode;
+    }
+    return false;
+}
+
+function RemoveFileExtension(path) {
+    return path.substring(0, path.lastIndexOf('.'));
+}
+
+function ImgurUrlToId(url) {
+    return url.substring(url.lastIndexOf("/")+1 ,url.lastIndexOf("."));
+}
+
+function GetJsonTags() {
+    return tags.GetAllTagData();
+}
+
+function JsonDataToBlob(data) {
+    return new Blob([JSON.stringify(data)], { type: "text/json" });
+}
+
+function DownloadBlob(blob, filename) {
+    const link = document.createElement("a");
+    link.download = filename;
+    link.href = window.URL.createObjectURL(blob);
+    link.dataset.downloadurl = ["text/json", link.download, link.href].join(":");
+    const evt = new MouseEvent("click", {
+        view: window,
+        bubbles: true,
+        cancelable: true,
+    });
+
+    link.dispatchEvent(evt);
+    link.remove()
+}
+
+function LoadJsonFileToTags(file) {
+    var reader = new FileReader();
+    reader.readAsText(file, "UTF-8");
+    reader.onload = function (event) {
+        tags.SetJsonTags(JSON.parse(event.target.result))
+        console.log(`file ${file.name} successfully loaded`);
+    }
+}
+
+function LoadTagFileIfSelected() {
+    if(document.querySelector("#inputTagFile").files.length > 0) {
+        const file = document.querySelector("#inputTagFile").files[0];
+        LoadJsonFileToTags(file);
+    }
 }

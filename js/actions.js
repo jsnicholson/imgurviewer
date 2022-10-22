@@ -8,6 +8,8 @@ export {
     ActionLoadAlbumImages,
     ActionLogOut,
     ActionLoadMoreMedia,
+    ActionDownloadTagFile,
+    ActionOpenFullscreenMedia
 };
 
 import * as constants from "/imgurviewer/js/constants.js";
@@ -40,4 +42,14 @@ function ActionLoadMoreMedia() {
 function ActionLogOut() {
     localStorage.setItem("current_account", null);
     utils.LoggedOut();
+}
+
+function ActionDownloadTagFile() {
+    const jsonTags = utils.GetJsonTags();
+    const blobTags = utils.JsonDataToBlob(jsonTags);
+    utils.DownloadBlob(blobTags, "tags.json");
+}
+
+function ActionOpenFullscreenMedia(media) {
+    utils.DisableScroll();
 }

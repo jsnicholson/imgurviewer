@@ -5,7 +5,7 @@ export {
 };
 
 import * as imgur from "/imgurviewer/js/imgur.js";
-import * as events from "/imgurviewer/js/events.js";
+import { CreateEventPageOfResultsLoaded } from "/imgurviewer/js/events.js";
 import * as utils from "/imgurviewer/js/utils.js";
 import * as constants from "/imgurviewer/js/constants.js";
 
@@ -69,7 +69,8 @@ function CompleteGetRequest(response) {
         response.data.reverse();
     results.data=results.data.concat(response.data);
     results.pagesLoaded++;
-    events.DispatchEventPageOfResultsLoaded(response.data);
+    const event = CreateEventPageOfResultsLoaded(response.data);
+    document.querySelector("#content-gallery").dispatchEvent(event);
 }
 
 async function GetPageOfAccountImages(pageNum) {

@@ -1,6 +1,8 @@
 import * as utils from "/imgurviewer/js/utils.js";
 import * as actions from "/imgurviewer/js/actions.js";
 import * as process from "/imgurviewer/js/process.js";
+import BsTags from "/imgurviewer/vendor/bstags/js/tags.js";
+import * as tags from "/imgurviewer/js/tagfile.js";
 
 window.onload = function() {
     utils.HandleParams();
@@ -11,6 +13,10 @@ window.onload = function() {
         utils.LoggedOut();
 
     SetupEventListeners();
+
+    BsTags.init("select[multiple]");
+
+    utils.LoadTagFileIfSelected();
 }
 
 window.addEventListener('scroll', ()=> {
@@ -59,10 +65,34 @@ window.DismissAlert = function(alert) {
     alert.parentNode.setAttribute("hidden","");
 }
 
+window.DownloadTagFile = function() {
+    actions.ActionDownloadTagFile();
+}
+
 function SetupEventListeners() {
     document.querySelector("#content-gallery").addEventListener("eventPageOfResultsLoaded", (event) =>
         process.HandleEventPageOfResultsLoaded(event));
 
     document.querySelector("#inputAlbumId").addEventListener("input", (event) =>
         process.HandleInputAlbumIdChange(event));
+
+    document.querySelector("#sectionContentFullscreen").addEventListener("click", (event) => {
+            if(event.target.id == "fullscreenMediaDetails" || utils.IsChildOf(event.target, "fullscreenMediaDetails"))
+                return;
+            
+            document.querySelector("#sectionContentFullscreen").setAttribute("hidden","");
+            utils.EnableScroll();
+        });
+
+    document.querySelector("#selectTagsMedia").addEventListener("eventTagAdded", (event) => {
+        tags.AddTag(event.detail.id, event.detail.tag);
+    });
+
+    document.querySelector("#selectTagsMedia").addEventListener("eventTagRemoved", (event) => {
+        tags.RemoveTag(event.detail.id, event.detail.tag);
+    });
+
+    document.querySelector("#inputTagFile").onchange = () => {
+        utils.LoadTagFileIfSelected();
+    };
 }

@@ -13,6 +13,7 @@ function BuildMediaWithSkeleton(fileInfo) {
     let media = BuildMedia(fileInfo);
     let skeleton = BuildSkeletonMedia({width:fileInfo.width,height:fileInfo.height});
     container.append(media,skeleton);
+    container.addEventListener("click", (event) => utils.OpenFullscreenMedia(media));
     return container;
 }
 
