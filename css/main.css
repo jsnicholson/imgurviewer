@@ -102,6 +102,16 @@ span.badge {
 	font-size: 0.9rem;
 }
 
+#toast {
+	position: fixed;
+	bottom: 4px;
+	left: 50%;
+	transform: translate(-50%, 0);
+	width: 95%;
+	z-index: 10;
+	border-radius: 20px;
+}
+
 @keyframes shimmer {
 	0% {
 	  background-position: 100% 0;

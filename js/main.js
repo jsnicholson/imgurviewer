@@ -1,8 +1,8 @@
-import * as utils from "/imgurviewer/js/utils.js";
-import * as actions from "/imgurviewer/js/actions.js";
-import * as process from "/imgurviewer/js/process.js";
-import BsTags from "/imgurviewer/vendor/bstags/js/tags.js";
-import * as tags from "/imgurviewer/js/tagfile.js";
+import * as utils from "/js/utils.js";
+import * as actions from "/js/actions.js";
+import * as process from "/js/process.js";
+import BsTags from "/vendor/bstags/js/tags.js";
+import * as tags from "/js/tagfile.js";
 
 window.onload = function() {
     utils.HandleParams();
@@ -12,6 +12,7 @@ window.onload = function() {
     else
         utils.LoggedOut();
 
+    MakeFunctionsAccessible();
     SetupEventListeners();
 
     BsTags.init("select[multiple]");
@@ -19,80 +20,95 @@ window.onload = function() {
     utils.LoadTagFileIfSelected();
 }
 
-window.addEventListener('scroll', ()=> {
-    if(utils.GetDisplayOptions().automaticallyLoadMoreMedia) {
-        if(window.innerHeight+window.scrollY>=document.body.offsetHeight-1000&&(process.GetIsReadyForMoreMedia() == true)){
-            process.SetIsReadyForMoreMedia(false);
-            actions.ActionLoadMoreMedia();
-        }
+function MakeFunctionsAccessible() {
+    // make functions accessible to main html
+    window.Authorise = function() {
+        actions.ActionAuthorise();
     }
-});
 
-window.addEventListener('scroll', ()=> {
-    if(document.body.scrollTop > 20 || document.documentElement.scrollTop > 20)
-        document.getElementById("btnBackToTop").style.display = "block";
-    else
-        document.getElementById("btnBackToTop").style.display = "none";
-});
+    window.LoadAccountImages = function() {
+        actions.ActionLoadAccountImages();
+    }
 
-// make functions accessible to main html
-window.Authorise = function() {
-    actions.ActionAuthorise();
-}
+    window.LoadAlbumImages = function() {
+        utils.ShowToast("danger", "Could not perform action");
+        actions.ActionLoadAlbumImages();
+    }
 
-window.LoadAccountImages = function() {
-    actions.ActionLoadAccountImages();
-}
+    window.LogOut = function() {
+        actions.ActionLogOut();
+    }
 
-window.LoadAlbumImages = function() {
-    actions.ActionLoadAlbumImages();
-}
+    window.ScrollToTop = function() {
+        utils.ScrollToTop();
+    }
 
-window.LogOut = function() {
-    actions.ActionLogOut();
-}
+    window.LoadMoreMedia = function() {
+        document.getElementById("buttonLoadMoreMedia").setAttribute("hidden","");
+        actions.ActionLoadMoreMedia();
+    }
 
-window.ScrollToTop = function() {
-    utils.ScrollToTop();
-}
+    window.DismissAlert = function(alert) {
+        alert.parentNode.setAttribute("hidden","");
+    }
 
-window.LoadMoreMedia = function() {
-    document.getElementById("buttonLoadMoreMedia").setAttribute("hidden","");
-    actions.ActionLoadMoreMedia();
-}
+    window.DownloadTagFile = function() {
+        actions.ActionDownloadTagFile();
+    }
 
-window.DismissAlert = function(alert) {
-    alert.parentNode.setAttribute("hidden","");
-}
+    window.ClearTagFileInput = function() {
+        document.getElementById("inputTagFile").value="";
+    }
 
-window.DownloadTagFile = function() {
-    actions.ActionDownloadTagFile();
+    window.MergeTagFile = function() {
+        
+    }
+
+    window.OverwriteTagFile = function() {
+        utils.LoadTagFileIfSelected();
+    }
 }
 
 function SetupEventListeners() {
-    document.querySelector("#content-gallery").addEventListener("eventPageOfResultsLoaded", (event) =>
+    window.addEventListener('scroll', ()=> {
+        if(utils.GetDisplayOptions().automaticallyLoadMoreMedia) {
+            if(window.innerHeight+window.scrollY>=document.body.offsetHeight-1000&&(process.GetIsReadyForMoreMedia() == true)){
+                process.SetIsReadyForMoreMedia(false);
+                actions.ActionLoadMoreMedia();
+            }
+        }
+    });
+    
+    window.addEventListener('scroll', ()=> {
+        if(document.body.scrollTop > 20 || document.documentElement.scrollTop > 20)
+            document.getElementById("btnBackToTop").style.display = "block";
+        else
+            document.getElementById("btnBackToTop").style.display = "none";
+    });
+
+    document.getElementById("content-gallery").addEventListener("eventPageOfResultsLoaded", (event) =>
         process.HandleEventPageOfResultsLoaded(event));
 
-    document.querySelector("#inputAlbumId").addEventListener("input", (event) =>
+    document.getElementById("inputAlbumId").addEventListener("input", (event) =>
         process.HandleInputAlbumIdChange(event));
 
-    document.querySelector("#sectionContentFullscreen").addEventListener("click", (event) => {
+    document.getElementById("sectionContentFullscreen").addEventListener("click", (event) => {
             if(event.target.id == "fullscreenMediaDetails" || utils.IsChildOf(event.target, "fullscreenMediaDetails"))
                 return;
             
-            document.querySelector("#sectionContentFullscreen").setAttribute("hidden","");
+            document.getElementById("sectionContentFullscreen").setAttribute("hidden","");
             utils.EnableScroll();
         });
 
-    document.querySelector("#selectTagsMedia").addEventListener("eventTagAdded", (event) => {
+    document.getElementById("selectTagsMedia").addEventListener("eventTagAdded", (event) => {
         tags.AddTag(event.detail.id, event.detail.tag);
     });
 
-    document.querySelector("#selectTagsMedia").addEventListener("eventTagRemoved", (event) => {
+    document.getElementById("selectTagsMedia").addEventListener("eventTagRemoved", (event) => {
         tags.RemoveTag(event.detail.id, event.detail.tag);
     });
 
-    document.querySelector("#inputTagFile").onchange = () => {
-        utils.LoadTagFileIfSelected();
+    document.getElementById("inputTagFile").onchange = () => {
+        actions.ActionImportJsonTagFile();
     };
 }

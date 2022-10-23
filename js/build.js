@@ -3,8 +3,9 @@ export {
     BuildContentColumns
 };
 
-import * as process from "/imgurviewer/js/process.js";
-import * as utils from "/imgurviewer/js/utils.js";
+import * as process from "/js/process.js";
+import * as utils from "/js/utils.js";
+import { ActionOpenFullscreenMedia } from "/js/actions.js";
 
 function BuildMediaWithSkeleton(fileInfo) {
     const container = document.createElement("div");
@@ -13,7 +14,7 @@ function BuildMediaWithSkeleton(fileInfo) {
     let media = BuildMedia(fileInfo);
     let skeleton = BuildSkeletonMedia({width:fileInfo.width,height:fileInfo.height});
     container.append(media,skeleton);
-    container.addEventListener("click", (event) => utils.OpenFullscreenMedia(media));
+    container.addEventListener("click", (event) => ActionOpenFullscreenMedia(media));
     return container;
 }
 

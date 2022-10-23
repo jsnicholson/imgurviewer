@@ -1,40 +1,63 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <script src="/imgurviewer/js/main.js" type="module"></script>
+        <script src="/js/main.js" type="module"></script>
         <!-- required meta tags-->
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, intial-scale=1, maximum-scale=1.0, user-scalable=no">
         <title>Imgurviewer</title>
 
         <!-- icon -->
-        <link rel="icon" type="image/ico" href="/imgurviewer/assets/favicon.ico">
+        <link rel="icon" type="image/ico" href="/assets/favicon.ico">
 
         <!-- stylesheets -->
             <!-- vendor -->
-            <link rel="stylesheet" href="/imgurviewer/vendor/bootstrap-5.1.3/css/bootstrap.min.css">
+            <link rel="stylesheet" href="/vendor/bootstrap-5.1.3/css/bootstrap.min.css">
             <!-- custom -->
-            <link rel="stylesheet" href="/imgurviewer/css/main.css">
+            <link rel="stylesheet" href="/css/main.css">
 
         <!-- fonts -->
             <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400i,400,100">
 
         <!-- scripts -->
             <!-- vendor -->
-            <script src="/imgurviewer/vendor/bootstrap-5.1.3/js/bootstrap.min.js"></script>
+            <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+            <script src="/vendor/bootstrap-5.1.3/js/bootstrap.min.js"></script>
             <!-- custom -->
     </head>
     <body>
+        <aside>
+            <section id="sectionModal">
+                  <div id="modalJsonMergeOrOverwrite" class="modal" tabindex="-1">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title">Tag file imported</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          <p>Do you wish to merge the newly imported file with the existng file, or overwrite it?</p>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="window.ClearTagFileInput()">Close</button>
+                          <button type="button" class="btn btn-primary" onclick="window.MergeTagFile()">Merge</button>
+                          <button type="button" class="btn btn-primary" onclick="window.OverwriteTagFile()">Overwrite</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+            </section>
+        </aside>
         <main class="container">
             <section id="sectionOptions" class="mt-2">
-                <div class="accordion" id="accordionExample">
+                <div class="accordion" id="accordionMain">
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingOne">
                             <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                                 Sources
                             </button>
                         </h2>
-                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionMain">
                             <div class="accordion-body">
                                 <div id="buttonAuthorise" class="btn btn-primary" onclick="window.Authorise()">Authorise</div>
                                 <div id="buttonLogOut" class="btn btn-primary" onclick="window.LogOut()">Log out</div>
@@ -50,7 +73,7 @@
                                 Actions
                             </button>
                         </h2>
-                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionMain">
                             <div class="accordion-body">
                                 <div id="buttonLoadAccountImages" class="btn btn-primary" onclick="window.LoadAccountImages()">Load account images</div>
                                 <br>
@@ -64,7 +87,7 @@
                                 Options
                             </button>
                         </h2>
-                        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionMain">
                             <div class="accordion-body row">
                                 <div class="col-md-6 col-sm-12 mb-2 mb-md-0">
                                     <div class="form-group">
@@ -85,6 +108,10 @@
                                         <input class="form-check-input" type="checkbox" value="" id="checkOnlyAddMediaOnceLoaded">
                                         <label class="form-check-label" for="checkOnlyAddMediaOnceLoaded">Only add media once loaded</label>
                                     </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="" id="checkAlwaysReadyForMoreMedia" checked>
+                                        <label class="form-check-label" for="checkAlwaysReadyForMoreMedia">Wait for all media to load before loading more</label>
+                                    </div>
                                 </div>    
                             </div>
                         </div>
@@ -95,7 +122,7 @@
                                 Tags
                             </button>
                         </h2>
-                        <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#accordionExample">
+                        <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#accordionMain">
                             <div class="accordion-body">
                                 <div class="col-md-6 col-sm-12">
                                     <label for="inputTagFile" class="form-label">Import Tag File</label>
@@ -132,8 +159,6 @@
                     </div>
                 </div>
             </section>
-            <section id="sectionToast"></section>
-
         </main>
         <aside>
             <section id="sectionContentFullscreen" hidden>
@@ -155,10 +180,15 @@
                     </div>
                 </div>
             </section>
+            <section id="sectionToasts" class="mt-2">
+                <div id="toast" class="alert alert-dismissible alert-danger" hidden>
+                    <span id="toast-msg">message</span>
+                </div>
+            </section>
         </aside>
         <!-- Back to top -->
         <button class="btn-primary" onclick="window.ScrollToTop()" id="btnBackToTop" title="Go to top">
-            <img src="/imgurviewer/assets/arrow_up.svg" style="width:30px;height:30px;">
+            <img src="/assets/arrow_up.svg" style="width:30px;height:30px;">
         </button>
     </body>
 </html>

@@ -10,10 +10,10 @@ export {
     HandleInputAlbumIdChange
 };
 
-import * as utils from "/imgurviewer/js/utils.js";
-import * as actions from "/imgurviewer/js/actions.js";
-import * as constants from "/imgurviewer/js/constants.js";
-import * as build from "/imgurviewer/js/build.js";
+import * as utils from "/js/utils.js";
+import * as actions from "/js/actions.js";
+import * as constants from "/js/constants.js";
+import * as build from "/js/build.js";
 
 let mediaObj = {mediaLoaded:0, mediaToBeLoaded:0, mediaArray:[], pagesLoaded:0, isReadyForMoreMedia:true, mediaElements:[]};
 let displayOptions = {sortOrder:"", automaticallyLoadMoreMedia:false};
@@ -47,7 +47,7 @@ function LoadMoreMedia() {
         let media = build.BuildMediaWithSkeleton(fileInfo);
         mediaObj.mediaElements.push(media);
 
-        if(!utils.GetDisplayOptions.onlyAddMediaOnceLoaded)
+        if(!utils.GetDisplayOptions().onlyAddMediaOnceLoaded)
             utils.AddMediaToGallery(media);
     }
 }
@@ -57,7 +57,7 @@ function SingleMediaLoaded(media) {
 
     media.parentNode.classList.remove("media-loading");
 
-    if(utils.GetDisplayOptions.onlyAddMediaOnceLoaded)
+    if(utils.GetDisplayOptions().onlyAddMediaOnceLoaded)
         utils.AddMediaToGallery(media);
 
     if(mediaObj.mediaLoaded == mediaObj.mediaToBeLoaded) {
@@ -71,7 +71,7 @@ function SingleMediaLoaded(media) {
 
 function HandleError(error) {
     console.log(`there was an error: ${error}`);
-    utils.ShowAlert("danger", constants.ERROR_FETCH_ABORTED);
+    utils.ShowToast("danger", constants.ERROR_FETCH_ABORTED);
 }
 
 function InitMediaObj() {
@@ -92,7 +92,8 @@ function ShuffleUnloadedMedia() {
 }
 
 function GetIsReadyForMoreMedia() {
-    return mediaObj.isReadyForMoreMedia;
+    const alwaysReadyForMoreMedia = utils.GetDisplayOptions().alwaysReadyForMoreMedia;
+    return (alwaysReadyForMoreMedia) ? true : mediaObj.isReadyForMoreMedia;
 }
 
 function SetIsReadyForMoreMedia(bool) {
