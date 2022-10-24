@@ -343,9 +343,7 @@ class Tags {
     });
     this._searchInput.addEventListener("focusout", (event) => {
       this._hideSuggestions();
-      if (this.keepOpen) {
-        this._resetSearchInput();
-      }
+      this._resetSearchInput();
     });
     // keypress doesn't send arrow keys, so we use keydown
     this._searchInput.addEventListener("keydown", (event) => {
@@ -421,6 +419,7 @@ class Tags {
       this._resetSearchInput();
     }
     // CUSTOM CODE ADDED
+    this.resetSuggestions();
     // custom event to hook into so that this data can be seen when added
     const event = CreateEventTagAdded(text, this._selectElement.getAttribute("data-tags-for"));
     this._selectElement.dispatchEvent(event);

@@ -57,12 +57,14 @@ function ActionOpenFullscreenMedia(media) {
     utils.ResetFullscreenMedia();
     utils.SetFullscreenMedia(media);
     utils.ShowFullscreenMedia();
+    utils.FocusFullscreenMediaTags();
 }
 
 function ActionImportJsonTagFile() {
     // if there are already some tags, then we need to decide whether to merge or overwrite
-    if(utils.CountObjectKeys(utils.GetJsonTags()))
+    if(utils.CountObjectKeys(utils.GetJsonTags().media))
         utils.OpenJsonMergeOrOverwriteModal();
+    // otherwise just straight load the file
     else
         utils.LoadTagFileIfSelected();
 }

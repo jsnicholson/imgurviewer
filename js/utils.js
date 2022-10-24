@@ -29,7 +29,10 @@ export {
     SetFullscreenMedia,
     ShowFullscreenMedia,
     OpenJsonMergeOrOverwriteModal,
-    CountObjectKeys
+    CountObjectKeys,
+    FocusFullscreenMediaTags,
+    AddGlobalTag,
+    RemoveGlobalTag
 };
 
 import * as constants from "/js/constants.js"
@@ -264,18 +267,29 @@ function SetFullscreenMediaDetailsSource(media) {
 
 function SetFullscreenMediaDetailsTags(media) {
     const selectTags = document.getElementById("selectTagsMedia");
-    const tagInstance = BsTags.getInstance(document.getElementById("selectTagsMedia"));
     const id = ImgurUrlToId(media.src);
     selectTags.setAttribute("data-tags-for", id);
+
+    const tagInstance = BsTags.getInstance(document.getElementById("selectTagsMedia"));
+    tagInstance.removeAll();
+
+    const oldOptions = selectTags.querySelectorAll("option");
+    for(const option of oldOptions) {
+        if(option.textContent != "Add some tags ...")
+            option.remove();
+    }
+
     
-    tagInstance.reset();
-    const dataTags = tags.GetAllTagData()[id];
-    if(dataTags) {
+    const dataTags = tags.GetAllTagData();
+    if(dataTags.tags) {
         for(const tag of dataTags.tags) {
             tagInstance.addItem(tag);
+            if(!dataTags.media[id] || !dataTags.media[id].tags.includes(tag))
+                tagInstance.removeItem(tag);
         }
     }
     tagInstance._adjustWidth();
+    tagInstance.resetSuggestions();
 }
 
 function EnableScroll() {
@@ -288,13 +302,8 @@ function DisableScroll() {
         document.body.classList.add("prevent-scrolling");
 }
 
-function IsChildOf(childNode, parentId) {
-    while(childNode.parentNode) {
-        if(childNode.parentNode.id == parentId)
-            return true;
-        childNode = childNode.parentNode;
-    }
-    return false;
+function IsChildOf(childNode, parentNode) {
+    return parentNode.contains(childNode);
 }
 
 function RemoveFileExtension(path) {
@@ -334,7 +343,18 @@ function LoadJsonFileToTags(file) {
     reader.onload = function (event) {
         tags.SetJsonTags(JSON.parse(event.target.result))
         console.log(`file ${file.name} successfully loaded`);
+        AddGlobalTagsToSelect();
     }
+}
+
+function AddGlobalTagsToSelect() {
+    const tagInstance = BsTags.getInstance(document.getElementById("selectGlobalTags"));
+    const tagData = tags.GetAllTagData().tags;
+    for(const tag of tagData) {
+        tagInstance.addItem(tag);
+        tagInstance.removeItem(tag);
+    }
+    tagInstance.resetSuggestions();
 }
 
 function LoadTagFileIfSelected() {
@@ -355,4 +375,23 @@ function OpenJsonMergeOrOverwriteModal() {
 
 function CountObjectKeys(obj) {
     return Object.keys(obj).length;
+}
+
+function FocusFullscreenMediaTags() {
+    document.querySelector("#selectTagsMedia+.form-control input").focus();
+}
+
+function AddGlobalTag(tag) {
+    const tagInstance = BsTags.getInstance(document.getElementById("selectGlobalTags"));
+    tagInstance.addItem(tag);
+    tagInstance.removeItem(tag);
+    tagInstance.resetSuggestions();
+}
+
+function RemoveGlobalTag(tag) {
+    const tagInstance = BsTags.getInstance(document.getElementById("selectGlobalTags"));
+    tagInstance.removeItem(tag);
+    let opt = document.getElementById("selectGlobalTags").querySelector('option[value="' + tag + '"]');
+    opt.remove();
+    tagInstance.resetSuggestions();
 }

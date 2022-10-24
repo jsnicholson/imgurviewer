@@ -75,9 +75,8 @@
                         </h2>
                         <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionMain">
                             <div class="accordion-body">
-                                <div id="buttonLoadAccountImages" class="btn btn-primary" onclick="window.LoadAccountImages()">Load account images</div>
-                                <br>
-                                <div id="buttonLoadAlbumImages" class="btn btn-primary" onclick="window.LoadAlbumImages()" disabled>Load album images</div>
+                                <button id="buttonLoadAccountImages" class="btn btn-primary" type="button" onclick="window.LoadAccountImages()">Load account images</button>
+                                <button id="buttonLoadAlbumImages" class="btn btn-primary" type="button" onclick="window.LoadAlbumImages()" disabled>Load album images</button>
                             </div>
                         </div>
                     </div>
@@ -112,25 +111,34 @@
                                         <input class="form-check-input" type="checkbox" value="" id="checkAlwaysReadyForMoreMedia" checked>
                                         <label class="form-check-label" for="checkAlwaysReadyForMoreMedia">Wait for all media to load before loading more</label>
                                     </div>
-                                </div>    
-                            </div>
-                        </div>
-                    </div>
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingFour">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                                Tags
-                            </button>
-                        </h2>
-                        <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#accordionMain">
-                            <div class="accordion-body">
-                                <div class="col-md-6 col-sm-12">
-                                    <label for="inputTagFile" class="form-label">Import Tag File</label>
-                                    <input class="form-control" type="file" id="inputTagFile" accept=".json">
                                 </div>
-                                <div class="col-md-6 col-sm-12">
-                                    <div id="buttonDownloadTagFile" class="btn btn-primary" onclick="window.DownloadTagFile()">Download Tag File</div>
-                                </div>
+                                <div class="col-sm-12">
+                                    <div class="accordion" id="accordionTags">
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="headingTags">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTags" aria-expanded="false" aria-controls="collapseTags">
+                                                    Tags
+                                                </button>
+                                            </h2>
+                                            <div id="collapseTags" class="accordion-collapse collapse" aria-labelledby="headingTags" data-bs-parent="#accordionTags">
+                                                <div class="accordion-body">
+                                                    <div class="col-md-6 col-sm-12">
+                                                        <label for="inputTagFile" class="form-label">Import Tag File</label>
+                                                        <input class="form-control" type="file" id="inputTagFile" accept=".json">
+                                                    </div>
+                                                    <div class="col-md-6 col-sm-12">
+                                                        <div id="buttonDownloadTagFile" class="btn btn-primary" onclick="window.DownloadTagFile()">Download Tag File</div>
+                                                    </div>
+                                                    <div class="col-sm-12">
+                                                        <select id="selectGlobalTags" class="form-select" multiple data-allow-clear="true" name="tagsGlobal[]">
+                                                            <option selected disabled hidden value="">Add some tags ...</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>  
                             </div>
                         </div>
                     </div>
@@ -173,8 +181,8 @@
                                 <a id="buttonGoToSource" class="btn btn-primary" type="button" target="_blank">Open</a>
                             </div>
                             <label for="selectTagsMedia">Tags</label>
-                            <select class="form-select" id="selectTagsMedia" multiple data-allow-new="true" data-allow-clear="true" data-clear-label="Clear" data-show-all-suggestions="true">
-                                <option selected disabled hidden value="">Choose a tag...</option>
+                            <select class="form-select" id="selectTagsMedia" multiple data-allow-new="true" data-allow-clear="true" data-clear-label="Clear">
+                                <option selected disabled hidden value="">Add some tags ...</option>
                             </select>
                         </div>
                     </div>

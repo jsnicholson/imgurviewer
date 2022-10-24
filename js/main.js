@@ -93,9 +93,11 @@ function SetupEventListeners() {
         process.HandleInputAlbumIdChange(event));
 
     document.getElementById("sectionContentFullscreen").addEventListener("click", (event) => {
-            if(event.target.id == "fullscreenMediaDetails" || utils.IsChildOf(event.target, "fullscreenMediaDetails"))
+            if(event.target.id == "fullscreenMediaDetails" || 
+                utils.IsChildOf(event.target, document.getElementById("fullscreenMediaDetails")) ||
+                event.target.classList.contains("dropdown-item"))
                 return;
-            
+
             document.getElementById("sectionContentFullscreen").setAttribute("hidden","");
             utils.EnableScroll();
         });
@@ -111,4 +113,12 @@ function SetupEventListeners() {
     document.getElementById("inputTagFile").onchange = () => {
         actions.ActionImportJsonTagFile();
     };
+
+    document.getElementById("selectGlobalTags").addEventListener("eventGlobalTagAdded", (event) => {
+        utils.AddGlobalTag(event.detail.tag);
+    });
+
+    document.getElementById("selectGlobalTags").addEventListener("eventGlobalTagRemoved", (event) => {
+        utils.RemoveGlobalTag(event.detail.tag);
+    });
 }
