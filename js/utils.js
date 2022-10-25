@@ -28,11 +28,14 @@ export {
     ResetFullscreenMedia,
     SetFullscreenMedia,
     ShowFullscreenMedia,
+    HideFullscreenMedia,
+    IsFullscreenMediaOpen,
     OpenJsonMergeOrOverwriteModal,
     CountObjectKeys,
     FocusFullscreenMediaTags,
     AddGlobalTag,
-    RemoveGlobalTag
+    RemoveGlobalTag,
+    GetCurrentFullscreenMedia
 };
 
 import * as constants from "/js/constants.js"
@@ -41,6 +44,8 @@ import * as repository from "/js/repository.js";
 import * as process from "/js/process.js";
 import * as tags from "/js/tagfile.js";
 import BsTags from "/vendor/bstags/js/tags.js";
+
+let currentFullscreenMedia = null;
 
 function HandleParams() {
     const params = GetWindowParams();
@@ -243,6 +248,15 @@ function ShowFullscreenMedia() {
     section.removeAttribute("hidden");
 }
 
+function HideFullscreenMedia() {
+    const section = document.getElementById("sectionContentFullscreen");
+    section.setAttribute("hidden","");
+}
+
+function IsFullscreenMediaOpen() {
+    return !document.getElementById("sectionContentFullscreen").hasAttribute("hidden");
+}
+
 function ResetFullscreenMedia() {
     const container = document.getElementById("fullscreenMediaContainer");
     while(container.firstChild)
@@ -252,7 +266,9 @@ function ResetFullscreenMedia() {
 function SetFullscreenMedia(media) {
     const container = document.getElementById("fullscreenMediaContainer");
     const newMedia = media.cloneNode();
+    currentFullscreenMedia = newMedia;
     container.append(newMedia);
+    media.scrollIntoView();
 
     SetFullscreenMediaDetailsSource(media);
     SetFullscreenMediaDetailsTags(media);
@@ -394,4 +410,8 @@ function RemoveGlobalTag(tag) {
     let opt = document.getElementById("selectGlobalTags").querySelector('option[value="' + tag + '"]');
     opt.remove();
     tagInstance.resetSuggestions();
+}
+
+function GetCurrentFullscreenMedia() {
+    return currentFullscreenMedia;
 }

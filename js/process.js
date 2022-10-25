@@ -7,7 +7,9 @@ export {
     GetDisplayOptions,
     GetIsReadyForMoreMedia,
     SetIsReadyForMoreMedia,
-    HandleInputAlbumIdChange
+    HandleInputAlbumIdChange,
+    GetNextMedia,
+    GetPreviousMedia,
 };
 
 import * as utils from "/js/utils.js";
@@ -43,9 +45,10 @@ function LoadMoreMedia() {
         if(i >= mediaObj.mediaArray.length)
             return;
 
+        console.log(`loading media ${i}`);
         let fileInfo = mediaObj.mediaArray[i];
         let media = build.BuildMediaWithSkeleton(fileInfo);
-        mediaObj.mediaElements.push(media);
+        mediaObj.mediaElements.push(media.childNodes[0]);
 
         if(!utils.GetDisplayOptions().onlyAddMediaOnceLoaded)
             utils.AddMediaToGallery(media);
@@ -53,8 +56,8 @@ function LoadMoreMedia() {
 }
 
 function SingleMediaLoaded(media) {
+    console.log(`successfully loaded media ${mediaObj.mediaLoaded}`);
     mediaObj.mediaLoaded++;
-
     media.parentNode.classList.remove("media-loading");
 
     if(utils.GetDisplayOptions().onlyAddMediaOnceLoaded)
@@ -102,4 +105,18 @@ function SetIsReadyForMoreMedia(bool) {
 
 function HandleInputAlbumIdChange(event) {
     let value = event.target.value;
+}
+
+function GetNextMedia(prevMedia) {
+    const indexOfPrevMedia = mediaObj.mediaElements.map(e => e.src).indexOf(prevMedia.src);
+    const newIndex = indexOfPrevMedia + 1;
+    const clampedIndex = Math.min(mediaObj.mediaElements.length-1, Math.max(0,newIndex));
+    return mediaObj.mediaElements[clampedIndex];
+}
+
+function GetPreviousMedia(nextMedia) {
+    const indexOfNextMedia = mediaObj.mediaElements.map(e => e.src).indexOf(nextMedia.src);
+    const newIndex = indexOfNextMedia - 1;
+    const clampedIndex = Math.min(mediaObj.mediaElements.length-1, Math.max(0,newIndex));
+    return mediaObj.mediaElements[clampedIndex];
 }

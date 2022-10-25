@@ -14,6 +14,7 @@ window.onload = function() {
 
     MakeFunctionsAccessible();
     SetupEventListeners();
+    SetupKeyHandlers();
 
     BsTags.init("select[multiple]");
 
@@ -98,7 +99,7 @@ function SetupEventListeners() {
                 event.target.classList.contains("dropdown-item"))
                 return;
 
-            document.getElementById("sectionContentFullscreen").setAttribute("hidden","");
+            utils.HideFullscreenMedia();
             utils.EnableScroll();
         });
 
@@ -120,5 +121,35 @@ function SetupEventListeners() {
 
     document.getElementById("selectGlobalTags").addEventListener("eventGlobalTagRemoved", (event) => {
         utils.RemoveGlobalTag(event.detail.tag);
+    });
+}
+
+function SetupKeyHandlers() {
+    document.addEventListener("keydown", (event) => {
+        console.log(`key pressed, name:${event.key} code:${event.code}`);
+        if(utils.IsFullscreenMediaOpen()) {
+            switch(event.code) {
+                case "Escape":
+                    utils.HideFullscreenMedia();
+                    utils.EnableScroll();
+                    break;
+                case "ArrowLeft":
+                    {
+                        const currentMedia = utils.GetCurrentFullscreenMedia();
+                        const prevMedia = process.GetPreviousMedia(currentMedia);
+                        actions.ActionOpenFullscreenMedia(prevMedia);
+                    }
+                    break;
+                case "ArrowRight":
+                    {
+                        const currentMedia = utils.GetCurrentFullscreenMedia();
+                        const nextMedia = process.GetNextMedia(currentMedia);
+                        actions.ActionOpenFullscreenMedia(nextMedia);
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
     });
 }
