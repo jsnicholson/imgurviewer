@@ -45,7 +45,6 @@ function LoadMoreMedia() {
         if(i >= mediaObj.mediaArray.length)
             return;
 
-        console.log(`loading media ${i}`);
         let fileInfo = mediaObj.mediaArray[i];
         let media = build.BuildMediaWithSkeleton(fileInfo);
         mediaObj.mediaElements.push(media.childNodes[0]);
@@ -56,7 +55,6 @@ function LoadMoreMedia() {
 }
 
 function SingleMediaLoaded(media) {
-    console.log(`successfully loaded media ${mediaObj.mediaLoaded}`);
     mediaObj.mediaLoaded++;
     media.parentNode.classList.remove("media-loading");
 

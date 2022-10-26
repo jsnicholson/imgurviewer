@@ -126,7 +126,7 @@ function SetupEventListeners() {
 
 function SetupKeyHandlers() {
     document.addEventListener("keydown", (event) => {
-        console.log(`key pressed, name:${event.key} code:${event.code}`);
+        // only apply these key press actions if we're in fullscreen media
         if(utils.IsFullscreenMediaOpen()) {
             switch(event.code) {
                 case "Escape":
@@ -137,14 +137,16 @@ function SetupKeyHandlers() {
                     {
                         const currentMedia = utils.GetCurrentFullscreenMedia();
                         const prevMedia = process.GetPreviousMedia(currentMedia);
-                        actions.ActionOpenFullscreenMedia(prevMedia);
+                        if(currentMedia != prevMedia)
+                            actions.ActionOpenFullscreenMedia(prevMedia);
                     }
                     break;
                 case "ArrowRight":
                     {
                         const currentMedia = utils.GetCurrentFullscreenMedia();
                         const nextMedia = process.GetNextMedia(currentMedia);
-                        actions.ActionOpenFullscreenMedia(nextMedia);
+                        if(currentMedia != nextMedia)
+                            actions.ActionOpenFullscreenMedia(nextMedia);
                     }
                     break;
                 default:
