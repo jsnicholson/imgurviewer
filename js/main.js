@@ -122,6 +122,11 @@ function SetupEventListeners() {
     document.getElementById("selectGlobalTags").addEventListener("eventGlobalTagRemoved", (event) => {
         utils.RemoveGlobalTag(event.detail.tag);
     });
+
+    document.getElementById("checkAutoLoadMoreMedia").addEventListener("change", (event) => {
+       if(process.GetIsReadyForMoreMedia())
+        document.getElementById("buttonLoadMoreMedia").removeAttribute("hidden"); 
+    });
 }
 
 function SetupKeyHandlers() {
