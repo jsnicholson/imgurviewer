@@ -1,0 +1,58 @@
+account image stuff {
+	Load Account Images clicked
+		async begin fetching info
+			HandlePageResults -> mediaArray (as pages come in)
+			this is async and will populate mediaArray over time
+			
+	as soon as we have first page of results (async)
+		begin calculating filteredArray
+			just indexes of location in mediaArray
+			based on tags
+			if index count reaches 20, request filtered array be rendered
+			
+	new page added to results
+		calculate filteredarray
+			indexes of locations in mediaarray based on tags
+			if no tags, just count linear
+			if index count reaches 20, request filtered array be rendered
+		
+	filteredarray requested
+		foreach index, check mediaElements
+			if not null, async frame media
+				do as many of these as possible until hitting a null
+			if null, go build
+	
+	frame media
+		add media to gallery
+		keep track how many items added to gallery {count}
+			
+	new item added to mediaelements
+		foreach index in current filteredarray starting at {count}
+			if not null, async frame media
+				do as many of these as possible until hitting a null
+			if null, go build
+			
+	getisreadyformoremedia
+		if {count} matches filteredarray length
+}
+
+imgurrepository
+	makes the bare api calls
+imgurservice
+	does the processes such as reversing received data
+imgurcontroller
+	gets data from imgur
+	simple calls for types of data
+	doesnt process data
+actionhandler
+	direct calls as a result of user input
+mediaservice
+	loads and stores media
+domservice
+	listens for events and performs dom manipulation where required
+eventservice
+	defines and creates events and dispatches them
+buildservice
+	creates individual dom elements
+compose
+	combines dom elements into complete components
