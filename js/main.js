@@ -138,7 +138,7 @@ function SetupKeyHandlers() {
                     utils.HideFullscreenMedia();
                     utils.EnableScroll();
                     break;
-                case "ArrowLeft":
+                case "ArrowUp":
                     {
                         const currentMedia = utils.GetCurrentFullscreenMedia();
                         const prevMedia = process.GetPreviousMedia(currentMedia);
@@ -146,7 +146,7 @@ function SetupKeyHandlers() {
                             actions.ActionOpenFullscreenMedia(prevMedia);
                     }
                     break;
-                case "ArrowRight":
+                case "ArrowDown":
                     {
                         const currentMedia = utils.GetCurrentFullscreenMedia();
                         const nextMedia = process.GetNextMedia(currentMedia);
