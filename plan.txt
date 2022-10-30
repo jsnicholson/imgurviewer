@@ -4,12 +4,6 @@ account image stuff {
 			HandlePageResults -> mediaArray (as pages come in)
 			this is async and will populate mediaArray over time
 			
-	as soon as we have first page of results (async)
-		begin calculating filteredArray
-			just indexes of location in mediaArray
-			based on tags
-			if index count reaches 20, request filtered array be rendered
-			
 	new page added to results
 		calculate filteredarray
 			indexes of locations in mediaarray based on tags
