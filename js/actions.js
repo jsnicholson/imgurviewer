@@ -8,6 +8,9 @@ export {
     ActionLoadAlbumImages,
     ActionLogOut,
     ActionLoadMoreMedia,
+    ActionDownloadTagFile,
+    ActionOpenFullscreenMedia,
+    ActionImportJsonTagFile
 };
 
 import * as constants from "/imgurviewer/js/constants.js";
@@ -40,4 +43,28 @@ function ActionLoadMoreMedia() {
 function ActionLogOut() {
     localStorage.setItem("current_account", null);
     utils.LoggedOut();
+}
+
+function ActionDownloadTagFile() {
+    const jsonTags = utils.GetJsonTags();
+    const blobTags = utils.JsonDataToBlob(jsonTags);
+    const username = utils.GetCurrentAccount().username;
+    utils.DownloadBlob(blobTags, `${username}-tags.json`);
+}
+
+function ActionOpenFullscreenMedia(media) {
+    utils.DisableScroll();
+    utils.ResetFullscreenMedia();
+    utils.SetFullscreenMedia(media);
+    utils.ShowFullscreenMedia();
+    utils.FocusFullscreenMediaTags();
+}
+
+function ActionImportJsonTagFile() {
+    // if there are already some tags, then we need to decide whether to merge or overwrite
+    if(utils.CountObjectKeys(utils.GetJsonTags().media))
+        utils.OpenJsonMergeOrOverwriteModal();
+    // otherwise just straight load the file
+    else
+        utils.LoadTagFileIfSelected();
 }

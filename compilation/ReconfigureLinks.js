@@ -7,7 +7,7 @@ const ALLOWED_ENVIRONMENT_ARGS = [
     "dev"
 ];
 const REGEX_DOUBLE_BACKSLASH = /(?<!\\)\\(?!\\)/g;
-const REGEX_FILE_LINKS = /"[a-zA-Z\/\.\-\d]+(\.js|\.css|\.ico|\.html)"/g;
+const REGEX_FILE_LINKS = /"[a-zA-Z\/\.\-\d_]+(\.js|\.css|\.ico|\.html|\.svg)"/g;
 let LINKS_REPLACED = 0;
 
 const filesystem = require("fs");

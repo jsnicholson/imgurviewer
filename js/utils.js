@@ -13,14 +13,39 @@ export {
     SetupContentColumns,
     ChangeText,
     ShowAlert,
+    ShowToast,
     InputToAlbumId,
-    SetupForMedia
+    SetupForMedia,
+    EnableScroll,
+    DisableScroll,
+    IsChildOf,
+    RemoveFileExtension,
+    GetJsonTags,
+    JsonDataToBlob,
+    DownloadBlob,
+    LoadJsonFileToTags,
+    LoadTagFileIfSelected,
+    ResetFullscreenMedia,
+    SetFullscreenMedia,
+    ShowFullscreenMedia,
+    HideFullscreenMedia,
+    IsFullscreenMediaOpen,
+    OpenJsonMergeOrOverwriteModal,
+    CountObjectKeys,
+    FocusFullscreenMediaTags,
+    AddGlobalTag,
+    RemoveGlobalTag,
+    GetCurrentFullscreenMedia
 };
 
 import * as constants from "/imgurviewer/js/constants.js"
 import * as compose from "/imgurviewer/js/compose.js";
 import * as repository from "/imgurviewer/js/repository.js";
 import * as process from "/imgurviewer/js/process.js";
+import * as tags from "/imgurviewer/js/tagfile.js";
+import BsTags from "/imgurviewer/vendor/bstags/js/tags.js";
+
+let currentFullscreenMedia = null;
 
 function HandleParams() {
     const params = GetWindowParams();
@@ -112,7 +137,7 @@ function LoggedOut() {
 }
 
 function ClearContent() {
-    document.querySelector("#content-gallery").innerHTML="";
+    document.getElementById("content-gallery").innerHTML="";
     document.getElementById("buttonLoadMoreMedia").setAttribute("hidden","");
     document.getElementById("spinnerLoadingContainer").setAttribute("hidden","");
 }
@@ -125,9 +150,13 @@ function ScrollToTop() {
 function GetDisplayOptions() {
     const sortSelect = document.getElementById("selectSortOrder");
     const checkAutomaticallyLoadMoreMedia = document.getElementById("checkAutoLoadMoreMedia");
+    const checkOnlyAddMediaOnceLoaded = document.getElementById("checkOnlyAddMediaOnceLoaded");
+    const checkAlwaysReadyForMoreMedia = document.getElementById("checkAlwaysReadyForMoreMedia");
     return {
         sortOrder:sortSelect.value,
-        automaticallyLoadMoreMedia:checkAutomaticallyLoadMoreMedia.checked
+        automaticallyLoadMoreMedia:checkAutomaticallyLoadMoreMedia.checked,
+        onlyAddMediaOnceLoaded:checkOnlyAddMediaOnceLoaded.checked,
+        alwaysReadyForMoreMedia:checkAlwaysReadyForMoreMedia.checked
     };
 }
 
@@ -153,7 +182,7 @@ function ChangeText(map) {
 }
 
 function SetupContentColumns() {
-    const containerWidth = document.querySelector("#content-gallery").offsetWidth;
+    const containerWidth = document.getElementById("content-gallery").offsetWidth;
 
     let numCols;
     if(containerWidth <= constants.BREAKPOINT_SM)
@@ -174,8 +203,32 @@ function ShowAlert(type, message) {
     alert.removeAttribute("hidden");
 }
 
+function ShowToast(type, message) {
+    let toast = document.getElementById("toast");
+    let toastMessage = document.getElementById("toast-msg");
+    toastMessage.textContent = message;
+    toast.setAttribute("class", `alert alert-dismissible ${constants.ERRORMAP_TYPE_TO_CLASS.get(type)}`);
+    toast.removeAttribute("hidden");
+    setTimeout(() => {
+        FadeOut(toast);
+    }, 4000);
+}
+
+function FadeOut(el){
+    el.style.opacity = 1;
+  
+    (function fade() {
+      if ((el.style.opacity -= .01) < 0) {
+        el.style.opacity = 1;
+        el.setAttribute("hidden","");
+      } else {
+        requestAnimationFrame(fade);
+      }
+    })();
+  };
+
 function InputToAlbumId() {
-    let value = document.querySelector("#inputAlbumId").value;
+    let value = document.getElementById("inputAlbumId").value;
     if(value.includes("/")) {
         let lastSlash = value.lastIndexOf("/");
         return value.slice(lastSlash);
@@ -188,4 +241,177 @@ function SetupForMedia() {
     process.InitMediaObj();
     ClearContent();
     SetupContentColumns();
+}
+
+function ShowFullscreenMedia() {
+    const section = document.getElementById("sectionContentFullscreen");
+    section.removeAttribute("hidden");
+}
+
+function HideFullscreenMedia() {
+    const section = document.getElementById("sectionContentFullscreen");
+    section.setAttribute("hidden","");
+}
+
+function IsFullscreenMediaOpen() {
+    return !document.getElementById("sectionContentFullscreen").hasAttribute("hidden");
+}
+
+function ResetFullscreenMedia() {
+    const container = document.getElementById("fullscreenMediaContainer");
+    while(container.firstChild)
+        container.removeChild(container.lastChild);
+}
+
+function SetFullscreenMedia(media) {
+    const container = document.getElementById("fullscreenMediaContainer");
+    const newMedia = media.cloneNode();
+    currentFullscreenMedia = newMedia;
+    container.append(newMedia);
+    media.scrollIntoView();
+
+    SetFullscreenMediaDetailsSource(media);
+    SetFullscreenMediaDetailsTags(media);
+}
+
+function SetFullscreenMediaDetailsSource(media) {
+    const sourceTextBox = document.getElementById("inputSource");
+    sourceTextBox.value = RemoveFileExtension(media.src);
+    const buttonGoToSource = document.getElementById("buttonGoToSource");
+    buttonGoToSource.setAttribute("href", sourceTextBox.value);
+}
+
+function SetFullscreenMediaDetailsTags(media) {
+    const selectTags = document.getElementById("selectTagsMedia");
+    const id = ImgurUrlToId(media.src);
+    selectTags.setAttribute("data-tags-for", id);
+
+    const tagInstance = BsTags.getInstance(document.getElementById("selectTagsMedia"));
+    tagInstance.removeAll();
+
+    const oldOptions = selectTags.querySelectorAll("option");
+    for(const option of oldOptions) {
+        if(option.textContent != "Add some tags ...")
+            option.remove();
+    }
+
+    
+    const dataTags = tags.GetAllTagData();
+    if(dataTags.tags) {
+        for(const tag of dataTags.tags) {
+            tagInstance.addItem(tag);
+            if(!dataTags.media[id] || !dataTags.media[id].tags.includes(tag))
+                tagInstance.removeItem(tag);
+        }
+    }
+    tagInstance._adjustWidth();
+    tagInstance.resetSuggestions();
+}
+
+function EnableScroll() {
+    document.body.classList.remove("prevent-scrolling");
+}
+
+function DisableScroll() {
+    const body = document.body;
+    if(body)
+        document.body.classList.add("prevent-scrolling");
+}
+
+function IsChildOf(childNode, parentNode) {
+    return parentNode.contains(childNode);
+}
+
+function RemoveFileExtension(path) {
+    return path.substring(0, path.lastIndexOf('.'));
+}
+
+function ImgurUrlToId(url) {
+    return url.substring(url.lastIndexOf("/")+1 ,url.lastIndexOf("."));
+}
+
+function GetJsonTags() {
+    return tags.GetAllTagData();
+}
+
+function JsonDataToBlob(data) {
+    return new Blob([JSON.stringify(data)], { type: "text/json" });
+}
+
+function DownloadBlob(blob, filename) {
+    const link = document.createElement("a");
+    link.download = filename;
+    link.href = window.URL.createObjectURL(blob);
+    link.dataset.downloadurl = ["text/json", link.download, link.href].join(":");
+    const evt = new MouseEvent("click", {
+        view: window,
+        bubbles: true,
+        cancelable: true,
+    });
+
+    link.dispatchEvent(evt);
+    link.remove()
+}
+
+function LoadJsonFileToTags(file) {
+    var reader = new FileReader();
+    reader.readAsText(file, "UTF-8");
+    reader.onload = function (event) {
+        tags.SetJsonTags(JSON.parse(event.target.result))
+        console.log(`file ${file.name} successfully loaded`);
+        AddGlobalTagsToSelect();
+    }
+}
+
+function AddGlobalTagsToSelect() {
+    const tagInstance = BsTags.getInstance(document.getElementById("selectGlobalTags"));
+    const tagData = tags.GetAllTagData().tags;
+    for(const tag of tagData) {
+        tagInstance.addItem(tag);
+        tagInstance.removeItem(tag);
+    }
+    tagInstance.resetSuggestions();
+}
+
+function LoadTagFileIfSelected() {
+    if(document.getElementById("inputTagFile").files.length > 0) {
+        const file = document.getElementById("inputTagFile").files[0];
+        LoadJsonFileToTags(file);
+    }
+}
+
+function OpenJsonMergeOrOverwriteModal() {
+    const button = document.createElement("button");
+    button.setAttribute("data-bs-toggle", "modal");
+    button.setAttribute("data-bs-target", "#modalJsonMergeOrOverwrite");
+    document.body.appendChild(button);
+    button.click();
+    button.remove();
+}
+
+function CountObjectKeys(obj) {
+    return Object.keys(obj).length;
+}
+
+function FocusFullscreenMediaTags() {
+    document.querySelector("#selectTagsMedia+.form-control input").focus();
+}
+
+function AddGlobalTag(tag) {
+    const tagInstance = BsTags.getInstance(document.getElementById("selectGlobalTags"));
+    tagInstance.addItem(tag);
+    tagInstance.removeItem(tag);
+    tagInstance.resetSuggestions();
+}
+
+function RemoveGlobalTag(tag) {
+    const tagInstance = BsTags.getInstance(document.getElementById("selectGlobalTags"));
+    tagInstance.removeItem(tag);
+    let opt = document.getElementById("selectGlobalTags").querySelector('option[value="' + tag + '"]');
+    opt.remove();
+    tagInstance.resetSuggestions();
+}
+
+function GetCurrentFullscreenMedia() {
+    return currentFullscreenMedia;
 }

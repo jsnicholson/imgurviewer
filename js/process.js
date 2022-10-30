@@ -7,7 +7,9 @@ export {
     GetDisplayOptions,
     GetIsReadyForMoreMedia,
     SetIsReadyForMoreMedia,
-    HandleInputAlbumIdChange
+    HandleInputAlbumIdChange,
+    GetNextMedia,
+    GetPreviousMedia,
 };
 
 import * as utils from "/imgurviewer/js/utils.js";
@@ -45,16 +47,19 @@ function LoadMoreMedia() {
 
         let fileInfo = mediaObj.mediaArray[i];
         let media = build.BuildMediaWithSkeleton(fileInfo);
-        mediaObj.mediaElements.push(media);
+        mediaObj.mediaElements.push(media.childNodes[0]);
 
-        utils.AddMediaToGallery(media);
+        if(!utils.GetDisplayOptions().onlyAddMediaOnceLoaded)
+            utils.AddMediaToGallery(media);
     }
 }
 
 function SingleMediaLoaded(media) {
     mediaObj.mediaLoaded++;
-
     media.parentNode.classList.remove("media-loading");
+
+    if(utils.GetDisplayOptions().onlyAddMediaOnceLoaded)
+        utils.AddMediaToGallery(media);
 
     if(mediaObj.mediaLoaded == mediaObj.mediaToBeLoaded) {
         mediaObj.isReadyForMoreMedia = true;
@@ -67,7 +72,7 @@ function SingleMediaLoaded(media) {
 
 function HandleError(error) {
     console.log(`there was an error: ${error}`);
-    utils.ShowAlert("danger", constants.ERROR_FETCH_ABORTED);
+    utils.ShowToast("danger", constants.ERROR_FETCH_ABORTED);
 }
 
 function InitMediaObj() {
@@ -88,7 +93,8 @@ function ShuffleUnloadedMedia() {
 }
 
 function GetIsReadyForMoreMedia() {
-    return mediaObj.isReadyForMoreMedia;
+    const alwaysReadyForMoreMedia = utils.GetDisplayOptions().alwaysReadyForMoreMedia;
+    return (alwaysReadyForMoreMedia) ? true : mediaObj.isReadyForMoreMedia;
 }
 
 function SetIsReadyForMoreMedia(bool) {
@@ -97,4 +103,18 @@ function SetIsReadyForMoreMedia(bool) {
 
 function HandleInputAlbumIdChange(event) {
     let value = event.target.value;
+}
+
+function GetNextMedia(prevMedia) {
+    const indexOfPrevMedia = mediaObj.mediaElements.map(e => e.src).indexOf(prevMedia.src);
+    const newIndex = indexOfPrevMedia + 1;
+    const clampedIndex = Math.min(mediaObj.mediaElements.length-1, Math.max(0,newIndex));
+    return mediaObj.mediaElements[clampedIndex];
+}
+
+function GetPreviousMedia(nextMedia) {
+    const indexOfNextMedia = mediaObj.mediaElements.map(e => e.src).indexOf(nextMedia.src);
+    const newIndex = indexOfNextMedia - 1;
+    const clampedIndex = Math.min(mediaObj.mediaElements.length-1, Math.max(0,newIndex));
+    return mediaObj.mediaElements[clampedIndex];
 }
