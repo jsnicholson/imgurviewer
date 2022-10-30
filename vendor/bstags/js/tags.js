@@ -274,6 +274,9 @@ class Tags {
       // Prevent fixed height due to form-control
       this._holderElement.style.height = "auto";
     }
+
+    // CUSTOM CODE
+    this._holderElement.setAttribute("for", this._selectElement.id);
   }
 
   _configureContainerElement() {
