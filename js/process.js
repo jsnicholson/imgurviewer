@@ -38,9 +38,10 @@ function HandleEventPageOfResultsLoaded(event) {
 function LoadMoreMedia() {
     document.getElementById("spinnerLoadingContainer").removeAttribute("hidden");
 
-    let endIndex = mediaObj.mediaLoaded+constants.IMAGES_TO_LOAD_EACH_TIME;
-    mediaObj.mediaToBeLoaded+=constants.IMAGES_TO_LOAD_EACH_TIME;
-    for(let i = mediaObj.mediaLoaded; i < endIndex; i++) {
+    const startIndex = mediaObj.mediaToBeLoaded;
+    mediaObj.mediaToBeLoaded += constants.IMAGES_TO_LOAD_EACH_TIME;
+    const endIndex = mediaObj.mediaToBeLoaded;
+    for(let i = startIndex; i < endIndex; i++) {
         // exit if we reach the end of the list
         if(i >= mediaObj.mediaArray.length)
             return;
