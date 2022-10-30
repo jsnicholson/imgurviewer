@@ -3,9 +3,9 @@ export {
     BuildContentColumns
 };
 
-import * as process from "/js/process.js";
-import * as utils from "/js/utils.js";
-import { ActionOpenFullscreenMedia } from "/js/actions.js";
+import * as process from "/imgurviewer/js/process.js";
+import * as utils from "/imgurviewer/js/utils.js";
+import { ActionOpenFullscreenMedia } from "/imgurviewer/js/actions.js";
 
 function BuildMediaWithSkeleton(fileInfo) {
     const container = document.createElement("div");

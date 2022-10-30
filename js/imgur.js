@@ -17,9 +17,9 @@ import {
     ENDPOINT_ACCOUNT_IMAGE_COUNT,
     ENDPOINT_ACCOUNT_IMAGES,
     ENDPOINT_ALBUM_IMAGES,
-} from  "/js/constants.js";
-import {GetCurrentAccount} from "/js/utils.js";
-import {HandleError} from "/js/process.js";
+} from  "/imgurviewer/js/constants.js";
+import {GetCurrentAccount} from "/imgurviewer/js/utils.js";
+import {HandleError} from "/imgurviewer/js/process.js";
 
 let abort = {controller:{},signal:{}};
 

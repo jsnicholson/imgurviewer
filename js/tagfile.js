@@ -5,8 +5,8 @@ export {
     SetJsonTags
 }
 
-import { CountObjectKeys } from "/js/utils.js";
-import { CreateEventGlobalTagAdded, CreateEventGlobalTagRemoved } from "/js/events.js";
+import { CountObjectKeys } from "/imgurviewer/js/utils.js";
+import { CreateEventGlobalTagAdded, CreateEventGlobalTagRemoved } from "/imgurviewer/js/events.js";
 
 let jsonData = {tags:[],media:{}};
 
