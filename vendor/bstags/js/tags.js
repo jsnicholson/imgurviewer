@@ -385,9 +385,9 @@ class Tags {
           this._keyboardNavigation = true;
           this._moveSelectionDown();
           // If we use arrow down without input, show suggestions
-          if (this._searchInput.value.length == 0 && !this._dropElement.classList.contains("show")) {
-            this._showSuggestions();
-          }
+          // if (this._searchInput.value.length == 0 && !this._dropElement.classList.contains("show")) {
+          //   this._showSuggestions();
+          // }
           break;
         case 8:
         case "Backspace":

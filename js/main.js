@@ -132,7 +132,8 @@ function SetupEventListeners() {
 function SetupKeyHandlers() {
     document.addEventListener("keydown", (event) => {
         // only apply these key press actions if we're in fullscreen media
-        if(utils.IsFullscreenMediaOpen()) {
+        const dropdown = document.querySelector(".form-control[for=selectTagsMedia] .dropdown-menu");
+        if(utils.IsFullscreenMediaOpen() && !dropdown.classList.contains("show")) {
             switch(event.code) {
                 case "Escape":
                     utils.HideFullscreenMedia();

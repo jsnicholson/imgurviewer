@@ -301,7 +301,7 @@ function SetFullscreenMediaDetailsTags(media) {
         for(const tag of dataTags.tags) {
             tagInstance.addItem(tag);
             if(!dataTags.media[id] || !dataTags.media[id].tags.includes(tag))
-                tagInstance.removeItem(tag);
+                tagInstance.removeItem(tag, true);
         }
     }
     tagInstance._adjustWidth();
@@ -368,7 +368,7 @@ function AddGlobalTagsToSelect() {
     const tagData = tags.GetAllTagData().tags;
     for(const tag of tagData) {
         tagInstance.addItem(tag);
-        tagInstance.removeItem(tag);
+        tagInstance.removeItem(tag, true);
     }
     tagInstance.resetSuggestions();
 }
@@ -400,13 +400,13 @@ function FocusFullscreenMediaTags() {
 function AddGlobalTag(tag) {
     const tagInstance = BsTags.getInstance(document.getElementById("selectGlobalTags"));
     tagInstance.addItem(tag);
-    tagInstance.removeItem(tag);
+    tagInstance.removeItem(tag, true);
     tagInstance.resetSuggestions();
 }
 
 function RemoveGlobalTag(tag) {
     const tagInstance = BsTags.getInstance(document.getElementById("selectGlobalTags"));
-    tagInstance.removeItem(tag);
+    tagInstance.removeItem(tag, true);
     let opt = document.getElementById("selectGlobalTags").querySelector('option[value="' + tag + '"]');
     opt.remove();
     tagInstance.resetSuggestions();

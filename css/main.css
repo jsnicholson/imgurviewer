@@ -101,6 +101,14 @@ span.badge {
 	font-size: 0.9rem;
 }
 
+.form-control.dropdown > div {
+	margin-top: -0.5rem;
+}
+
+.form-control.dropdown > div > * {
+	margin-top: 0.5rem;
+}
+
 #toast {
 	position: fixed;
 	bottom: 4px;
