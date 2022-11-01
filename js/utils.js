@@ -38,12 +38,12 @@ export {
     GetCurrentFullscreenMedia
 };
 
-import * as constants from "/imgurviewer/js/constants.js"
-import * as compose from "/imgurviewer/js/compose.js";
-import * as repository from "/imgurviewer/js/repository.js";
-import * as process from "/imgurviewer/js/process.js";
-import * as tags from "/imgurviewer/js/tagfile.js";
-import BsTags from "/imgurviewer/vendor/bstags/js/tags.js";
+import * as constants from "/js/constants.js"
+import * as compose from "/js/compose.js";
+import * as repository from "/js/repository.js";
+import * as process from "/js/process.js";
+import * as tags from "/js/tagfile.js";
+import BsTags from "/vendor/bstags/js/tags.js";
 
 let currentFullscreenMedia = null;
 

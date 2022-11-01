@@ -4,10 +4,10 @@ export {
     AbortExistingCallsIfExist
 };
 
-import * as imgur from "/imgurviewer/js/imgur.js";
-import { CreateEventPageOfResultsLoaded } from "/imgurviewer/js/events.js";
-import * as utils from "/imgurviewer/js/utils.js";
-import * as constants from "/imgurviewer/js/constants.js";
+import * as imgur from "/js/imgur.js";
+import { CreateEventPageOfResultsLoaded } from "/js/events.js";
+import * as utils from "/js/utils.js";
+import * as constants from "/js/constants.js";
 
 let results = {data:[],pageCount:0,pagesLoaded:0};
 
