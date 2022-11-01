@@ -12,7 +12,7 @@
  * - dropdown
  */
 
-import { CreateEventTagAdded, CreateEventTagRemoved } from "/js/events.js";
+import { CreateEventTagAdded, CreateEventTagRemoved } from "/imgurviewer/js/events.js";
 
 const ACTIVE_CLASS = "is-active";
 const ACTIVE_CLASSES = ["is-active", "bg-primary", "text-white"];
