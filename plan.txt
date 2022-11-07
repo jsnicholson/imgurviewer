@@ -50,3 +50,16 @@ buildservice
 	creates individual dom elements
 compose
 	combines dom elements into complete components
+
+what needs state
+	media
+		source
+		tags
+	mediaservice
+		details about whats been loaded
+		stored loaded media
+	imgurservice
+		abort signals
+	gallery
+		what is currently in the gallery
+	tagstorage
