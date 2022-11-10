@@ -1,7 +1,7 @@
 import * as utils from "/js/utils.js";
 import * as actions from "/js/actions.js";
 import * as process from "/js/process.js";
-import BsTags from "/vendor/bstags/js/tags.js";
+import BsTags from "/js/Tags.js";
 import * as tags from "/js/tagfile.js";
 
 window.onload = function() {

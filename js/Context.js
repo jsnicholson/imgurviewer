@@ -1,4 +1,8 @@
-import {Resolve} from "/js/Resolve.js";
+import {ImgurRepository} from "/js/ImgurRepository.js";
+import {MediaHandler} from "/js/MediaHandler.js";
+import {Gallery} from "/js/Gallery.js";
+import {Options} from "/js/Options.js";
+import {TagStorage} from "/js/TagStorage.js";
 
 export class Context {
     #_imgurRepository;
@@ -8,11 +12,11 @@ export class Context {
     #_tagStorage;
 
     constructor() {
-        this.#_imgurRepository = Resolve("ImgurRepository");
-        this.#_mediaHandler = Resolve("MediaHandler");
-        this.#_gallery = Resolve("Gallery");
-        this.#_options = Resolve("Options");
-        this.#_tagStorage = Resolve("TagStorage");
+        this.#_imgurRepository = new ImgurRepository();
+        this.#_mediaHandler = new MediaHandler();
+        this.#_gallery = new Gallery();
+        this.#_options = new Options();
+        this.#_tagStorage = new TagStorage();
     }
 
     ImgurRepository() { return this.#_imgurRepository; }

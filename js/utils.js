@@ -43,7 +43,7 @@ import * as compose from "/js/compose.js";
 import * as repository from "/js/repository.js";
 import * as process from "/js/process.js";
 import * as tags from "/js/tagfile.js";
-import BsTags from "/vendor/bstags/js/tags.js";
+import BsTags from "/js/Tags.js";
 
 let currentFullscreenMedia = null;
 

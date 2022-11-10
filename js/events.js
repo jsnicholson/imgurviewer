@@ -1,4 +1,5 @@
 export {
+    CreateEventAccountAuthorised,
     CreateEventPageOfResultsLoaded,
     CreateEventTagAdded,
     CreateEventTagRemoved,
@@ -6,13 +7,20 @@ export {
     CreateEventGlobalTagRemoved
 };
 
+function CreateEventAccountAuthorised(objAccountDetails) {
+    return new CustomEvent("eventAccountAuthorised", {
+        detail: {
+            account:objAccountDetails
+        }
+    });
+}
+
 function CreateEventPageOfResultsLoaded(data) {
     return new CustomEvent("eventPageOfResultsLoaded", {
         detail: {
             pageOfResultsLoaded:data,
         }
     });
-    
 }
 
 function CreateEventTagAdded(tagName, mediaId) {
