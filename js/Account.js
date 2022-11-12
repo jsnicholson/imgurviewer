@@ -1,17 +1,26 @@
 export {
     Account,
     BuildAccountDetailsObject,
-    StoreAccount
+    StoreAccount,
 }
 
-import {STORAGE_ITEM_ACCOUNT_IMGUR} from "/js/Constants.js";
+import { STORAGE_ITEM_ACCOUNT_IMGUR } from "/js/Constants.js";
+import { ActionAuthorise, ActionLogOut } from "/js/actions.js";
+import { CreateEventAccountLoggedIn } from "/js/events.js";
 
 class Account {
     details = null;
 
     constructor() {
-        details = JSON.parse(window.localStorage.getItem(STORAGE_ITEM_ACCOUNT_IMGUR));
-        Object.freeze(details);
+        this.details = JSON.parse(window.localStorage.getItem(STORAGE_ITEM_ACCOUNT_IMGUR));
+        Object.freeze(this.details);
+    }
+
+    Init() {
+        if(this.details != null) {
+            const event = CreateEventAccountLoggedIn();
+            document.dispatchEvent(event);
+        }
     }
 }
 
@@ -27,4 +36,12 @@ function BuildAccountDetailsObject(params) {
 
 function StoreAccount(objAccountDetails) {
     window.localStorage.setItem(STORAGE_ITEM_ACCOUNT_IMGUR, JSON.stringify(objAccountDetails));
+}
+
+window.Authorise = function() {
+    ActionAuthorise();
+}
+
+window.LogOut = function() {
+    ActionLogOut();
 }

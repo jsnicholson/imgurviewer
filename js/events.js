@@ -1,5 +1,7 @@
 export {
     CreateEventAccountAuthorised,
+    CreateEventAccountLoggedIn,
+    CreateEventAccountLoggedOut,
     CreateEventPageOfResultsLoaded,
     CreateEventTagAdded,
     CreateEventTagRemoved,
@@ -7,12 +9,39 @@ export {
     CreateEventGlobalTagRemoved
 };
 
+const mapEvents = new Map([
+    ["eventAccountAuthorised", ["account"]],
+    ["eventAccountLoggedIn",[]],
+    ["eventAccountLoggedOut",[]],
+    ["eventPageOfResultsLoaded",["pageOfResultsLoaded"]],
+    ["eventTagAdded",["tagName","mediaId"]],
+    ["eventTagRemoved",["tagName","mediaId"]],
+    ["eventGlobalTagAdded",["tagName"]],
+    ["eventGlobalTagRemoved",["tagName"]]
+]);
+
+function CreateEvent(eventName, data) {
+    const elements = mapEvents.get(eventName);
+    let detail = {};
+    for(const element of elements) {
+
+    }
+}
+
 function CreateEventAccountAuthorised(objAccountDetails) {
     return new CustomEvent("eventAccountAuthorised", {
         detail: {
             account:objAccountDetails
         }
     });
+}
+
+function CreateEventAccountLoggedIn() {
+    return new CustomEvent("eventAccountLoggedIn");
+}
+
+function CreateEventAccountLoggedOut() {
+    return new CustomEvent("eventAccountLoggedOut");
 }
 
 function CreateEventPageOfResultsLoaded(data) {

@@ -41,7 +41,7 @@ function ActionLoadMoreMedia() {
 }
 
 function ActionLogOut() {
-    localStorage.setItem("current_account", null);
+    localStorage.setItem(constants.STORAGE_ITEM_ACCOUNT_IMGUR, null);
     utils.LoggedOut();
 }
 

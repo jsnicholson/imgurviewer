@@ -22,7 +22,7 @@ export {
     TEXTMAP_ACTION_LOAD_ALBUM_IMAGES,
     ERROR_FETCH_ABORTED,
     ERRORMAP_TYPE_TO_CLASS,
-    STORAGE_ITEM_ACCOUNT
+    STORAGE_ITEM_ACCOUNT_IMGUR
 };
 
 const ENDPOINT_AUTHORISE="https://api.imgur.com/oauth2/authorize?client_id={{clientId}}&response_type=token";
@@ -64,4 +64,4 @@ const ERRORMAP_TYPE_TO_CLASS = new Map([
    ["info","alert-light"] 
 ]);
 
-const STORAGE_ITEM_ACCOUNT = "account_details";
+const STORAGE_ITEM_ACCOUNT_IMGUR = "account_details";

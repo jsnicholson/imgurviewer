@@ -129,8 +129,8 @@ function LoggedIn() {
 function LoggedOut() {
     let buttonAuthorise = document.getElementById("buttonAuthorise");
     let buttonLogOut = document.getElementById("buttonLogOut");
-    buttonAuthorise.classList.remove("d-none");
-    buttonLogOut.classList.add("d-none");
+    buttonAuthorise.removeAttribute("hidden");
+    buttonLogOut.setAttribute("hidden","");
 
     const textAccount = document.getElementById("paragraphAccount");
     textAccount.innerHTML = constants.TEXT_NOT_SIGNED_IN;

@@ -2,19 +2,22 @@
     app.js is the main runner for the application
 */
 
-import {Context} from "/js/Context.js";
-import {BuildAccountDetailsObject} from "/js/Account.js";
-import {CreateEventAccountAuthorised} from "/js/Events.js";
+import { Context } from "/js/Context.js";
+import { BuildAccountDetailsObject } from "/js/Account.js";
+import { CreateEventAccountAuthorised } from "/js/Events.js";
+import { Init as Init_Dom } from "/js/Dom.js";
 
 class App {
-    _context={};
+    context={};
 
-    constructor() {
-        this._context = new Context();
+    Run() {
+        this.context = new Context();
+        this.context.Init();
+
         this.#HandleWindowParams();
     }
 
-    GetContext() { return this._context; }
+    GetContext() { return this.context; }
 
     #GetWindowParams() {
         let completeUrl = new URL(window.location.href.replace("#","?"));
@@ -29,9 +32,21 @@ class App {
             const objAccountDetails = BuildAccountDetailsObject(params);
             const event = CreateEventAccountAuthorised(objAccountDetails);
             document.dispatchEvent(event);
+            history.replaceState("","", window.location.pathname + window.location.search);
         }
     }
 }
 
-const singleton = new App();
-export default singleton;
+
+const app = new App();
+export { app };
+
+window.onload = function() {
+    /*
+        some event listeners in other files to keep responsibility separate
+        call a function on these files to initialise these listeners
+    */
+    Init_Dom();
+    // run app after initialising to separate functionality from constructor
+    app.Run();
+}
