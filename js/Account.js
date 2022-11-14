@@ -9,6 +9,15 @@ import { ActionAuthorise, ActionLogOut } from "/js/actions.js";
 import { CreateEventAccountLoggedIn } from "/js/events.js";
 
 class Account {
+    /* details format
+        {
+            username,
+            id,
+            tokenAccess,
+            tokenRefresh,
+            dateExpiry
+        }
+    */
     details = null;
 
     constructor() {

@@ -1,4 +1,4 @@
-import { ImgurRepository } from "/js/ImgurRepository.js";
+import { ImgurService } from "/js/ImgurService.js";
 import { MediaHandler } from "/js/MediaHandler.js";
 import { Gallery } from "/js/Gallery.js";
 import { Options } from "/js/Options.js";
@@ -6,7 +6,7 @@ import { TagStorage } from "/js/TagStorage.js";
 import { Account, StoreAccount } from "/js/Account.js";
 
 export class Context {
-    imgurRepository;
+    imgurService;
     mediaHandler;
     gallery;
     options;
@@ -14,7 +14,7 @@ export class Context {
     account;
 
     constructor() {
-        this.imgurRepository = new ImgurRepository();
+        this.imgurService = new ImgurService();
         this.mediaHandler = new MediaHandler();
         this.gallery = new Gallery();
         this.options = new Options();

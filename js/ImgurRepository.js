@@ -34,18 +34,18 @@ function Authorise() {
 /*
     expected data
     {
-        abortSignal
-        accessToken
+        signalAbort
+        tokenAccess
     }
 */
 async function FetchAccountImageCount(data) {
     let headers = new Headers();
-    headers.append("Authorization", "Bearer " + data.accessToken);
+    headers.append("Authorization", "Bearer " + data.tokenAccess);
     const requestOptions = {
         method:"GET",
         headers:headers,
         redirect:"follow",
-        signal:data.abortSignal
+        signal:data.signalAbort
     };
 
     const response = await fetch(ENDPOINT_ACCOUNT_IMAGE_COUNT, requestOptions).catch(e => HandleError(e));
@@ -55,23 +55,23 @@ async function FetchAccountImageCount(data) {
 /*
     expected data
     {
-        abortSignal
-        accessToken
-        page
+        signalAbort
+        tokenAccess
+        intPage
     }
 */
 async function FetchPageOfAccountImages(data) {
     let headers = new Headers();
-    headers.append("Authorization", "Bearer "+ data.accessToken);
+    headers.append("Authorization", "Bearer "+ data.tokenAccess);
 
     const requestOptions = {
         method:"GET",
         headers:headers,
         redirect:"follow",
-        signal:data.abortSignal
+        signal:data.signalAbort
     };
 
-    const endpoint = ENDPOINT_ACCOUNT_IMAGES.replace("{{page}}", page);
+    const endpoint = ENDPOINT_ACCOUNT_IMAGES.replace("{{page}}", data.intPage);
     const response = await fetch(endpoint, requestOptions).catch(e => HandleError(e));
     return await response?.json();
 }
