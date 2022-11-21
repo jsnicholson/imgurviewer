@@ -3,7 +3,7 @@ import { MediaHandler } from "/js/MediaHandler.js";
 import { Gallery } from "/js/Gallery.js";
 import { Options } from "/js/Options.js";
 import { TagStorage } from "/js/TagStorage.js";
-import { Account, StoreAccount } from "/js/Account.js";
+import { Account } from "/js/Account.js";
 
 export class Context {
     imgurService;
@@ -26,11 +26,10 @@ export class Context {
         this.options.Init();
         this.account.Init();
 
-        document.addEventListener("eventAccountAuthorised", (event) => {this.#StoreAccountAndReload(event)});
+        document.addEventListener("eventAccountChanged", () => {this.#ReloadAccount()});
     }
 
-    #StoreAccountAndReload(event) {
-        StoreAccount(event.detail.account);
+    #ReloadAccount() {
         this.account = new Account();
         this.account.Init();
     }

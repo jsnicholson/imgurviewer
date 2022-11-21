@@ -19,23 +19,18 @@ export class Options {
         // set event listeners
         elemSortOrder.addEventListener("change", (event) => {
             this.sortOrder = event.currentTarget.value;
-            console.log(this);
         });
 
         elemAutomaticallyLoadMoreMedia.addEventListener("change", (event) => {
-            console.log("check auto load more media changed");
             this.checkAutomaticallyLoadMoreMedia = event.currentTarget.checked;
-            console.log(this);
         });
 
         elemOnlyAddMediaOnceLoaded.addEventListener("change", (event) => {
             this.checkOnlyAddMediaOnceLoaded = event.currentTarget.checked;
-            console.log(this);
         });
 
         elemAlwaysReadyForMoreMedia.addEventListener("change", (event) => {
             this.checkAlwaysReadyForMoreMedia = event.currentTarget.checked;
-            console.log(this);
         })
     }
 }

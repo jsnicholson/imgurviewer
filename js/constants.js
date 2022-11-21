@@ -6,6 +6,7 @@ export {
     ENDPOINT_ACCOUNT_IMAGES,
     ENDPOINT_ALBUM_IMAGES,
     PAGE_SIZE,
+    PAGE_SIZE_IMGUR,
     IMAGES_TO_LOAD_EACH_TIME,
     BREAKPOINT_SM,
     BREAKPOINT_MD,
@@ -32,6 +33,7 @@ const ENDPOINT_ACCOUNT_IMAGES="https://api.imgur.com/3/account/me/images/{{page}
 const ENDPOINT_ALBUM_IMAGES="https://api.imgur.com/3/album/{{albumHash}}/images";
 const CLIENT_ID="058c8bb3e94cc6d";
 const PAGE_SIZE=50;
+const PAGE_SIZE_IMGUR=50;
 const IMAGES_TO_LOAD_EACH_TIME=20;
 const BREAKPOINT_SM=576;
 const BREAKPOINT_MD=768;

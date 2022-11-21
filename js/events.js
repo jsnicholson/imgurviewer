@@ -1,7 +1,8 @@
 export {
     CreateEventAccountAuthorised,
-    CreateEventAccountLoggedIn,
-    CreateEventAccountLoggedOut,
+    CreateEventAccountIsLoggedIn,
+    CreateEventAccountIsLoggedOut,
+    CreateEventAccountChanged,
     CreateEventPageOfResultsLoaded,
     CreateEventTagAdded,
     CreateEventTagRemoved,
@@ -11,8 +12,8 @@ export {
 
 const mapEvents = new Map([
     ["eventAccountAuthorised", ["account"]],
-    ["eventAccountLoggedIn",[]],
-    ["eventAccountLoggedOut",[]],
+    ["eventAccountIsLoggedIn",[]],
+    ["eventAccountIsLoggedOut",[]],
     ["eventPageOfResultsLoaded",["pageOfResultsLoaded"]],
     ["eventTagAdded",["tagName","mediaId"]],
     ["eventTagRemoved",["tagName","mediaId"]],
@@ -24,7 +25,9 @@ function CreateEvent(eventName, data) {
     const elements = mapEvents.get(eventName);
     let detail = {};
     for(const element of elements) {
-
+        if(!data[element])
+            console.error(`event ${eventName} requires data '${element}' that has not been supplied`);
+        detail[element] = data[element];
     }
 }
 
@@ -36,12 +39,16 @@ function CreateEventAccountAuthorised(objAccountDetails) {
     });
 }
 
-function CreateEventAccountLoggedIn() {
-    return new CustomEvent("eventAccountLoggedIn");
+function CreateEventAccountIsLoggedIn() {
+    return new CustomEvent("eventAccountIsLoggedIn");
 }
 
-function CreateEventAccountLoggedOut() {
-    return new CustomEvent("eventAccountLoggedOut");
+function CreateEventAccountIsLoggedOut() {
+    return new CustomEvent("eventAccountIsLoggedOut");
+}
+
+function CreateEventAccountChanged() {
+    return new CustomEvent("eventAccountChanged");
 }
 
 function CreateEventPageOfResultsLoaded(data) {

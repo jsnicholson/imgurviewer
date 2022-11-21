@@ -1,12 +1,11 @@
 export {
     Account,
     BuildAccountDetailsObject,
-    StoreAccount,
+    RemoveAccount,
 }
 
 import { STORAGE_ITEM_ACCOUNT_IMGUR } from "/js/Constants.js";
-import { ActionAuthorise, ActionLogOut } from "/js/actions.js";
-import { CreateEventAccountLoggedIn } from "/js/events.js";
+import { CreateEventAccountIsLoggedIn, CreateEventAccountIsLoggedOut, CreateEventAccountChanged } from "/js/events.js";
 
 class Account {
     /* details format
@@ -27,7 +26,10 @@ class Account {
 
     Init() {
         if(this.details != null) {
-            const event = CreateEventAccountLoggedIn();
+            const event = CreateEventAccountIsLoggedIn();
+            document.dispatchEvent(event);
+        } else {
+            const event = CreateEventAccountIsLoggedOut();
             document.dispatchEvent(event);
         }
     }
@@ -43,14 +45,15 @@ function BuildAccountDetailsObject(params) {
     }
 }
 
+document.addEventListener("eventAccountAuthorised", (event) => { StoreAccount(event.detail.account) });
 function StoreAccount(objAccountDetails) {
     window.localStorage.setItem(STORAGE_ITEM_ACCOUNT_IMGUR, JSON.stringify(objAccountDetails));
+    const event = CreateEventAccountChanged();
+    document.dispatchEvent(event);
 }
 
-window.Authorise = function() {
-    ActionAuthorise();
-}
-
-window.LogOut = function() {
-    ActionLogOut();
+function RemoveAccount() {
+    window.localStorage.setItem(STORAGE_ITEM_ACCOUNT_IMGUR, null);
+    const event = CreateEventAccountChanged();
+    document.dispatchEvent(event);
 }

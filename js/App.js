@@ -6,6 +6,7 @@ import { Context } from "/js/Context.js";
 import { BuildAccountDetailsObject } from "/js/Account.js";
 import { CreateEventAccountAuthorised } from "/js/Events.js";
 import { Init as Init_Dom } from "/js/Dom.js";
+import { Init as Init_Actions } from "/js/Actions.js";
 
 class App {
     context={};
@@ -16,8 +17,6 @@ class App {
 
         this.#HandleWindowParams();
     }
-
-    GetContext() { return this.context; }
 
     #GetWindowParams() {
         let completeUrl = new URL(window.location.href.replace("#","?"));
@@ -47,6 +46,7 @@ window.onload = function() {
         call a function on these files to initialise these listeners
     */
     Init_Dom();
+    Init_Actions();
     // run app after initialising to separate functionality from constructor
     app.Run();
 }

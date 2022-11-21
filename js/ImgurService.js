@@ -3,6 +3,7 @@ import {
     FetchAccountImageCount,
     FetchPageOfAccountImages
 } from "/js/ImgurRepository.js"
+import { PAGE_SIZE_IMGUR } from "/js/Constants.js";
 import { app } from "/js/App.js";
 
 export class ImgurService {
@@ -28,10 +29,20 @@ export class ImgurService {
         Authorise();
     }
 
+    async GetAllAccountImages() {
+        const imageCount = await this.#GetAccountPageCount();
+    }
+
+    async #GetAccountPageCount() {
+        const imageCount = await FetchAccountImageCount();
+        return Math.ceil(imageCount/PAGE_SIZE_IMGUR);
+    }
+
     async #GetPageOfAccountImages(intPage) {
         const data = {
             signalAbort: this.#abortController.abortSignal,
-            tokenAccess: app.GetContext().account.tokenAccess
+            tokenAccess: app.context.account.tokenAccess,
+            intPage: intPage
         };
 
         return await FetchPageOfAccountImages(data);
