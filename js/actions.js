@@ -6,13 +6,11 @@ import { app } from "/js/App.js";
 import { RemoveAccount } from "/js/Account.js";
 
 export {
-    Init,
     ActionAuthorise,
     ActionLogOut,
+    ActionLoadImagesFromAccount,
     ActionLoadAccountImages
 };
-
-function Init() {}
 
 function ActionAuthorise() {
     app.context.imgurService.Authorise();
@@ -22,15 +20,17 @@ function ActionLogOut() {
     RemoveAccount();
 }
 
-async function ActionLoadAccountImages() {
+async function ActionLoadImagesFromAccount() {
     app.context.imgurService.AbortExistingCalls();
 }
 
+async function ActionLoadImagesFromFile() {
+
+}
+
 window.Authorise = function() { ActionAuthorise(); }
-
 window.LogOut = function() { ActionLogOut(); }
-
-window.LoadAccountImages = function() { ActionLoadAccountImages(); }
+window.LoadAccountImages = function() { ActionLoadImagesFromAccount(); }
 
 // export {
 //     ActionAuthorise,
@@ -44,20 +44,20 @@ window.LoadAccountImages = function() { ActionLoadAccountImages(); }
 // };
 
 // import * as constants from "/js/constants.js";
-// import * as utils from "/js/utils.js";
+import * as utils from "/js/utils.js";
 // import * as process from "/js/process.js";
-// import * as repository from "/js/repository.js";
+import * as repository from "/js/repository.js";
 // import * as imgur from "/js/imgur.js";
 
 // function ActionAuthorise() {
 //     imgur.Authorise();
 // }
 
-// async function ActionLoadAccountImages() {
-//     utils.SetupForMedia();
-//     utils.ChangeText(constants.TEXTMAP_ACTION_LOAD_ACCOUNT_IMAGES);
-//     repository.GetAllAccountImages();
-// }
+async function ActionLoadAccountImages() {
+    utils.SetupForMedia();
+    utils.ChangeText(constants.TEXTMAP_ACTION_LOAD_ACCOUNT_IMAGES);
+    repository.GetAllAccountImages();
+}
 
 // async function ActionLoadAlbumImages() {
 //     utils.SetupForMedia();

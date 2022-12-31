@@ -2,10 +2,11 @@ import { app } from "/js/App.js";
 import { TEXT_SIGNED_IN_AS, TEXT_NOT_SIGNED_IN } from "/js/Constants.js";
 
 export {
-    Init,
     ChangeSourceToLoggedIn
 }
 
+// call to set up listeners
+Init();
 function Init() {
     document.addEventListener("eventAccountIsLoggedIn", () => {ChangeSourceToLoggedIn()});
     document.addEventListener("eventAccountIsLoggedOut", () => {ChangeSourceToLoggedOut()});

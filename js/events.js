@@ -7,7 +7,8 @@ export {
     CreateEventTagAdded,
     CreateEventTagRemoved,
     CreateEventGlobalTagAdded,
-    CreateEventGlobalTagRemoved
+    CreateEventGlobalTagRemoved,
+    CreateEventFileLoaded
 };
 
 const mapEvents = new Map([
@@ -92,4 +93,8 @@ function CreateEventGlobalTagRemoved(tagName) {
             tag: tagName
         }
     });
+}
+
+function CreateEventFileLoaded() {
+    return new CustomEvent("eventFileLoaded");
 }

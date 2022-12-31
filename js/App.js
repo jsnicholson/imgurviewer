@@ -5,8 +5,9 @@
 import { Context } from "/js/Context.js";
 import { BuildAccountDetailsObject } from "/js/Account.js";
 import { CreateEventAccountAuthorised } from "/js/Events.js";
-import { Init as Init_Dom } from "/js/Dom.js";
-import { Init as Init_Actions } from "/js/Actions.js";
+// some files imported so that code outside classes (usually for setting up listeners) is run
+import * as Dom from "/js/Dom.js";
+import * as Actions from "/js/Actions.js";
 
 class App {
     context={};
@@ -41,12 +42,6 @@ const app = new App();
 export { app };
 
 window.onload = function() {
-    /*
-        some event listeners in other files to keep responsibility separate
-        call a function on these files to initialise these listeners
-    */
-    Init_Dom();
-    Init_Actions();
     // run app after initialising to separate functionality from constructor
     app.Run();
 }
